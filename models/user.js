@@ -1,36 +1,21 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Create Schema
-const UserSchema = new Schema({
-  firstName: {
-    type: String,
-    required: true
-  },
-  lastName: {
-    type: String,
-    required: true
-  },
-  companyName: {
-    type: String,
-    required: false
-  },
-  phoneNumber: {
-    type: String,
-    required: false
-  },
-  email: {
-    type: String,
-    required: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  date: {
-    type: Date,
-    default: Date.now
-  }
+const schema = new Schema({
+    userName: { type: String, unique: true, required: true },
+    hash: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    createdDate: { type: Date, default: Date.now }
 });
 
-module.exports = User = mongoose.model("users", UserSchema);
+schema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+        delete ret._id;
+        delete ret.hash;
+    }
+});
+
+module.exports = mongoose.model('User', schema);

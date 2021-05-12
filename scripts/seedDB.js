@@ -1,12 +1,6 @@
 const mongoose = require("mongoose");
 const Project = require("../models/project");
 
-// This file empties the Books collection and inserts the books below
-
-// mongoose.connect(
-//   process.env.MONGOprojects_URI ||
-//   "mongodb://localhost/pps-backend"
-// );
 
 const connectionOptions = { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false };
 mongoose.connect(process.env.MONGOprojects_URI || "mongodb://localhost/pps-backend" , connectionOptions);
@@ -14,7 +8,7 @@ mongoose.Promise = global.Promise;
 
 const projectSeed = [
   {
-    title: "Project1",
+    projectTitle: "Project1",
     songs: [{song_title: "Song Title 1",
             song_arrangements: ["guitar", "piano", "drum"],
             song_status: {guitar: "Incomplete", piano: "Incomplete", drum: "Complete"},
@@ -55,7 +49,7 @@ const projectSeed = [
     companyName: "ABC"
   },
   {
-    title: "Project2",
+    projectTitle: "Project2",
     songs: [
       { song_title: "Song Title 2-1",
         song_arrangements: ["guitar1", "orchestra", "drum", "guitar2", "guitar3"],
@@ -114,7 +108,7 @@ const projectSeed = [
     companyName: "Verizon"
   },
   {
-    title: "Project3",
+    projectTitle: "Project3",
     songs: [{song_title: "Song Title 3-1",
             song_arrangements: ["guitar", "piano", "drum"],
             song_key: "Fm",
@@ -126,7 +120,7 @@ const projectSeed = [
     companyName: "Netflix"
   },
   {
-    title: "Project4",
+    projectTitle: "Project4",
     songs: [{song_title: "Song Title 4-1",
             song_arrangements: ["guitar", "piano", "drum"],
             song_key: "Am",
@@ -138,7 +132,7 @@ const projectSeed = [
     companyName: "Netflix"
   },
   {
-    title: "Project5",
+    projectTitle: "Project5",
     songs: [{song_title: "Song Title 5-1",
             song_arrangements: ["bass1", "drum", "guitar1", "guitar2"],
             song_key: "G",
@@ -151,12 +145,16 @@ const projectSeed = [
   }
 ];
 
+Project.deleteMany({})
+.then(res => {
+  console.log(res);
+  Project.insertMany(projectSeed)
 
-Project.insertMany(projectSeed)
-  .then(data => {
-    console.log(data + " records inserted!");
-    process.exit(0);
-  })
+.then(data => {
+  console.log(data + " records inserted!");
+  process.exit(0);
+})})
+
   .catch(err => {
     console.error(err);
     process.exit(1);

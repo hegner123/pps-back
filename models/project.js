@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 
 const ProjectSchema = new Schema({
-  title: { type: String, required: true },
+  projectTitle: { type: String, required: true },
   songs: [ new Schema ({
             song_title: String,
             song_arrangements: {type: Array, default: []},

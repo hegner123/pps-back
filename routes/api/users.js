@@ -1,77 +1,113 @@
-const config = require('../../config.json');
-const router = require("express").Router();
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const db = require('../../_helpers/db');
-const User = db.User;
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const keys = require("../../config/keys");
+const passport = require("passport");
 
-module.exports = {
-    authenticate,
-    getAll,
-    getById,
-    create,
-    update,
-    delete: _delete
-};
+// Load input validation
+const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
 
-async function authenticate({ username, password }) {
-    const user = await User.findOne({ username });
-    if (user && bcrypt.compareSync(password, user.hash)) {
-        const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: '7d' });
-        return {
-            ...user.toJSON(),
-            token
+// Load User model
+const db = require("../../_helpers/db");
+const User = db.User
+
+// @route POST api/users/register
+// @desc Register user
+// @access Public
+router.post("/register", (req, res) => {
+  // Form validation
+
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  User.findOne({ userName: req.body.userName }).then(user => {
+    if (user) {
+      return res.status(400).json({ userName: "Email already exists" });
+    } else {
+      const newUser = new User({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        userName: req.body.userName,
+        hash: req.body.hash
+      });
+      console.log("newUser info: " + newUser)
+      // Hash password before saving in database
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.hash, salt, (err, hash) => {
+          if (err) throw err;
+          newUser.hash = hash;
+          console.log("password hashed")
+          newUser
+            .save()
+            .then(user => {res.json(user);console.log("user added")})
+            .catch(err => console.log(err));
+        });
+      });
+    }
+  });
+});
+
+// @route POST api/users/login
+// @desc Login user and return JWT token
+// @access Public
+router.post("/login", (req, res) => {
+  // Form validation
+
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  const userName = req.body.userName;
+  const hash = req.body.hash;
+
+  // Find user by email
+  User.findOne({ userName }).then(user => {
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ userNameNotFound: "Email not found" });
+    }
+
+    // Check password
+    bcrypt.compare(hash, user.hash).then(isMatch => {
+      if (isMatch) {
+        // User matched
+        // Create JWT Payload
+        const payload = {
+          id: user.id,
+          firstName: user.firstName,
+          userName: user.userName
         };
-    }
-}
 
-async function getAll() {
-    return await User.find();
-}
-
-async function getById(id) {
-    return await User.findById(id);
-}
-
-async function create(userParam) {
-    // validate
-    if (await User.findOne({ username: userParam.username })) {
-        throw 'Username "' + userParam.username + '" is already taken';
-    }
-
-    const user = new User(userParam);
-
-    // hash password
-    if (userParam.password) {
-        user.hash = bcrypt.hashSync(userParam.password, 10);
-    }
-
-    // save user
-    await user.save();
-}
-
-async function update(id, userParam) {
-    const user = await User.findById(id);
-
-    // validate
-    if (!user) throw 'User not found';
-    if (user.username !== userParam.username && await User.findOne({ username: userParam.username })) {
-        throw 'Username "' + userParam.username + '" is already taken';
-    }
-
-    // hash password if it was entered
-    if (userParam.password) {
-        userParam.hash = bcrypt.hashSync(userParam.password, 10);
-    }
-
-    // copy userParam properties to user
-    Object.assign(user, userParam);
-
-    await user.save();
-}
-
-async function _delete(id) {
-    await User.findByIdAndRemove(id);
-}
+        // Sign token
+        jwt.sign(
+          payload,
+          keys.secretOrKey,
+          {
+            expiresIn: 31556926 // 1 year in seconds
+          },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: "Bearer " + token
+            });
+          }
+        );
+      } else {
+        return res
+          .status(400)
+          .json({ passwordincorrect: "Password incorrect" });
+      }
+    });
+  });
+});
 
 module.exports = router;
