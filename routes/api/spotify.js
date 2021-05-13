@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const spotifyController = require("../../controllers/spotifyController");
+const spotifyController = require("../../controllers/spotify.controller");
 
 
 // Matches with "/song-preview/"

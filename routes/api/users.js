@@ -28,7 +28,7 @@ router.post("/register", (req, res) => {
 
   User.findOne({ userName: req.body.userName }).then(user => {
     if (user) {
-      return res.status(400).json({ userName: "Email already exists" });
+      return res.status(400).json({ userName: "UserName already exists" });
     } else {
       const newUser = new User({
         firstName: req.body.firstName,
@@ -109,5 +109,15 @@ router.post("/login", (req, res) => {
     });
   });
 });
+router.get('/', getAll);
+
+function getAll(req, res, next) {
+  getAllUsers()
+      .then(users => res.json(users))
+      .catch(err => next(err));
+}
+async function getAllUsers() {
+  return await User.find();
+}
 
 module.exports = router;

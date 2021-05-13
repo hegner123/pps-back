@@ -6,17 +6,15 @@ module.exports = function validateLoginInput(data) {
 
   // Convert empty fields to an empty string so we can use validator functions
   data.userName = !isEmpty(data.userName) ? data.userName : "";
-  data.password = !isEmpty(data.password) ? data.password : "";
+  data.hash = !isEmpty(data.hash) ? data.hash : "";
 
   // userName checks
   if (Validator.isEmpty(data.userName)) {
     errors.userName = "UserName field is required";
-  } else if (!Validator.isuserName(data.userName)) {
-    errors.userName = "Username is invalid";
-  }
+  } 
   // Password checks
-  if (Validator.isEmpty(data.password)) {
-    errors.password = "Password field is required";
+  if (Validator.isEmpty(data.hash)) {
+    errors.hash = "Password field is required";
   }
 
   return {

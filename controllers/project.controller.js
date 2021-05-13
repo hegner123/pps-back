@@ -1,4 +1,4 @@
-const Project = require("../models/project");
+const Project = require("../models/project.models");
 
 // Defining methods for the booksController
 module.exports = {
