@@ -1,13 +1,13 @@
 ﻿const express = require("express");
 // const mongoose = require("mongoose");
-const path = require('path')
+const path = require('path');
 const bodyParser = require("body-parser");
 const passport = require("passport");
 // const multer = require('multer');
 const cors = require('cors');
 const errorHandler = require('./_helpers/error-handler');
-require('dotenv').config()
-const keys = require('./keys')
+require('dotenv').config();
+const keys = require('./keys');
 const users = require("./routes/api/users");
 const router = require("express").Router();
 const app = express();
@@ -22,7 +22,7 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.use("/api/", users);
+app.use('/api', users);
 app.use(routes);
 // global error handler
 app.use(errorHandler);
