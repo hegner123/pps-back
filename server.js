@@ -22,6 +22,11 @@ app.use(
 );
 app.use(bodyParser.json());
 
+app.use(passport.initialize());
+
+// Passport config
+require("./config/passport")(passport);
+
 app.use('/api', users);
 app.use(routes);
 // global error handler

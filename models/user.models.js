@@ -18,4 +18,4 @@ schema.set('toJSON', {
     }
 });
 
-module.exports = mongoose.model('User', schema);
+module.exports = User = mongoose.model("users", schema);

@@ -73,7 +73,7 @@ router.post("/login", (req, res) => {
   User.findOne({ userName }).then(user => {
     // Check if user exists
     if (!user) {
-      return res.status(404).json({ userNameNotFound: "Email not found" });
+      return res.status(404).json({ userNameNotFound: "User not found" });
     }
 
     // Check password
