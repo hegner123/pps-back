@@ -27,7 +27,7 @@ app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
 
-app.use('/api', users);
+// app.use('/users', users);
 app.use(routes);
 // global error handler
 app.use(errorHandler);

@@ -1,11 +1,11 @@
 {
     "name": "proproject-studio",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "Album Recording project management",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/hegner123/pps-backend"
+        "url": "https://github.com/hegner123/pps-back"
     },
     "scripts": {
         "start": "node ./server.js",
