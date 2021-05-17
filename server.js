@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 
 app.use(jwt());
 
-app.use(routes);
+app.use('/users', require('./users/users.controller'));
 
 // global error handler
 app.use(errorHandler);
