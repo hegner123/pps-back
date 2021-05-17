@@ -3,7 +3,6 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
-const passport = require("passport");
 
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
@@ -109,15 +108,16 @@ router.post("/login", (req, res) => {
     });
   });
 });
-router.get('/', getAll);
 
-function getAll(req, res, next) {
-  getAllUsers()
-      .then(users => res.json(users))
-      .catch(err => next(err));
-}
-async function getAllUsers() {
-  return await User.find();
-}
+// router.get('/', getAll);
+
+// function getAll(req, res, next) {
+//   getAllUsers()
+//       .then(users => res.json(users))
+//       .catch(err => next(err));
+// }
+// async function getAllUsers() {
+//   return await User.find();
+// }
 
 module.exports = router;

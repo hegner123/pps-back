@@ -22,7 +22,7 @@ module.exports = function validateRegisterInput(data) {
 
   // Email checks
   if (Validator.isEmpty(data.userName)) {
-    errors.userName = "Email field is required";
+    errors.userName = "Username field is required";
   };
 
   // Password checks
@@ -30,9 +30,9 @@ module.exports = function validateRegisterInput(data) {
     errors.hash = "Password field is required";
   };
 
-  if (!Validator.isLength(data.hash, { min: 6, max: 30 })) {
-    errors.hash = "Password must be at least 6 characters";
-  };
+  // if (!Validator.isLength(data.hash, { min: 6, max: 30 })) {
+  //   errors.hash = "Password must be at least 6 characters";
+  // };
 
   return {
     errors,
