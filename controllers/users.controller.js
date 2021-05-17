@@ -21,6 +21,7 @@ function authenticate(req, res, next) {
 
 function register(req, res, next) {
     userService.create(req.body)
+    .then(() => console.log('register'))
         .then(() => res.json({}))
         // .then(res => res.text({}))          // convert to plain text
         // .then(text => console.log(text))
