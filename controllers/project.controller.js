@@ -1,13 +1,12 @@
 const Project = require("../models/project.models");
+const projectService = require('../_helpers/projects.service')
 
-// Defining methods for the booksController
+
 module.exports = {
-  findAll: function(req, res) {
-    //console.log("param for findall: ", req.params.id)
-    Project
-      .find({members: req.params.id})
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+  getAll(req, res, next) {
+    projectService.getAll()
+        .then(projects => res.json(projects))
+        .catch(err => next(err));
   },
   findById: function(req, res) {
     Project

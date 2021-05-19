@@ -3,10 +3,11 @@ const projectController = require("../../controllers/project.controller");
 
 
 
-// Matches with "/" to creat projects
+// Matches with "/" to create projects
 router.route("/")
-  .get(projectController.findAll)
+  .get(projectController.getAll)
   .post(projectController.create)
+
 // Matches with "/api/projects/userprojects"
 router.route("/userprojects/:id")
   .get(projectController.findAll)

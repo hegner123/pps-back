@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Project = require("../models/project");
+const Project = require("../models/project.models");
 
 
 const connectionOptions = { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false };
@@ -133,17 +133,70 @@ const projectSeed = [
   },
   {
     projectTitle: "Project5",
-    songs: [{song_title: "Song Title 5-1",
-            song_arrangements: ["bass1", "drum", "guitar1", "guitar2"],
-            song_key: "G",
-            song_bpm: 80,
-            song_notes: [{notes:"there's no note"}]
-          }],
-    members: ["thing 5-1", "thing 5-2"],
-    total_arrangements: 4,
-    companyName: "Netflix"
+  songs: [{
+      song_title: "Magic Mountain",
+      song_arrangements: ["bass1", "drum" , "guitar1", "guitar2"],
+      song_key: "G",
+      song_bpm: 80,
+      song_notes: [{
+          notes: "there's no note"
+      }],
+      song_status: {
+          bass1: "Complete",
+          drum: "Complete",
+          guitar1: "Complete",
+          guitar2: "Complete"
+      }
+  },
+  {
+      song_title: "Rainbow",
+      song_arrangements: ["bass1", "bgv", "drum", "guitar1", "guitar2", "vocals"],
+      song_key: "G",
+      song_bpm: 80,
+      song_notes: [{
+          notes: "there's no note"
+      }],
+      song_status: {
+          bass1: "Complete",
+          bgv: "Incomplete",
+          drum: "Complete",
+          guitar1: "Complete",
+          guitar2: "Incomplete",
+          vocals: "Incomplete"
   }
-];
+},{
+  song_title: "No Hardcore Dancing In The Living Room",
+  song_arrangements: ["drum", "guitar1",   "guitar2", "guitar3", "orchestra"],
+  song_key: "Bm",
+  song_bpm: 120,
+  
+  song_status: {
+
+      drum: "Complete",
+      guitar1: "Complete",
+      guitar2: "Complete",
+      guitar3 : "Incomplete",
+      orchestra : "Complete"
+  }
+},
+{
+  song_title: "Song Title 2-2",
+  song_arrangements: ["drum", "orchestra", "trumpet"],
+  song_key: "Am",
+  song_bpm: 90,
+  
+  song_status: {
+
+      drum: "Complete",
+      trumpet: "Incomplete",
+      orchestra : "Complete"
+  }
+}],
+  members: ["michael", "thing 5-2"],
+  total_arrangements: 6,
+  companyName: "Netflix"
+  }]
+;
 
 Project.deleteMany({})
 .then(res => {

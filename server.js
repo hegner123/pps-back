@@ -1,5 +1,6 @@
 ﻿require('rootpath')();
 const express = require("express");
+const jwt = require('_helpers/jwt');
 const app = express();
 const path = require('path');
 const bodyParser = require("body-parser");
@@ -17,9 +18,10 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.use(jwt());
+// app.use(jwt());
 
 app.use('/users', require('./controllers/users.controller'));
+app.use('/api/',require('./routes'))
 
 // global error handler
 app.use(errorHandler);
