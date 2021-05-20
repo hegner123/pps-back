@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 // app.use(jwt());
 
 app.use('/users', require('./controllers/users.controller'));
-app.use('/api/',require('./routes'))
+app.use('/projects',require('./controllers/project.controller'))
 
 // global error handler
 app.use(errorHandler);

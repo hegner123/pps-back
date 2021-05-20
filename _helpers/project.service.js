@@ -17,6 +17,7 @@ async function getAll() {
 }
 
 async function getById(id) {
+    console.log(id)
     return await Projects.findById(id);
 }
 
