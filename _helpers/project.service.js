@@ -1,6 +1,6 @@
 ﻿const config = require('config.json');
 const db = require('_helpers/db');
-const Projects = db.Projects;
+const Projects = db.Project;
 
 module.exports = {
     getAll,
@@ -17,8 +17,8 @@ async function getAll() {
 }
 
 async function getById(id) {
-    console.log(id)
-    return await Projects.findById(id);
+    // console.log(Projects.findById(id))
+    return await Projects.findOne({members:id});
 }
 
 async function create(ProjectsParam) {

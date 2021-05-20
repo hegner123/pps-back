@@ -8,7 +8,6 @@ const cors = require('cors');
 const errorHandler = require('./_helpers/error-handler');
 require('dotenv').config();
 
-const routes = require("./routes");
 app.use(cors());
 // Bodyparser middleware
 app.use(
@@ -21,7 +20,7 @@ app.use(bodyParser.json());
 // app.use(jwt());
 
 app.use('/users', require('./controllers/users.controller'));
-app.use('/projects',require('./controllers/project.controller'))
+app.use('/projects',require('./controllers/project.controller'));
 
 // global error handler
 app.use(errorHandler);
