@@ -4,21 +4,19 @@ const projectService = require('../_helpers/project.service')
 
 router
   .get("/", getAll)
-  .post("/", create)
+  .post("/", create);
 router.get("/userprojects/:id", findById)
 
 module.exports = router;
 
 function getAll(req, res, next) {
-  
   projectService.getAll(req.body)
-  
     .then(projects => res.json(projects))
     .catch(err => next(err));
 }
 function findById(req, res, next) {
   projectService
-    .getById(req.params.idgit)
+    .getById(req.params.id)
     .then(project => project ? res.json(project) : res.sendStatus(404))
     .catch(err => next(err));
 }
