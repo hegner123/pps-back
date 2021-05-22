@@ -1,23 +1,16 @@
 ﻿require('rootpath')();
 const express = require("express");
-const jwt = require('_helpers/jwt');
 const app = express();
-const path = require('path');
-const bodyParser = require("body-parser");
 const cors = require('cors');
+const bodyParser = require("body-parser");
+const jwt = require('_helpers/jwt');
 const errorHandler = require('./_helpers/error-handler');
+const path = require('path');
 require('dotenv').config();
 
-app.use(cors());
-// Bodyparser middleware
-app.use(
-  bodyParser.urlencoded({
-    extended: false
-  })
-);
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-// app.use(jwt());
+app.use(cors());
 
 app.use('/users', require('./controllers/users.controller'));
 app.use('/projects',require('./controllers/project.controller'));
