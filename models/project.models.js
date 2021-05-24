@@ -18,7 +18,7 @@ const ProjectSchema = new Schema({
                   noteBody: String,
             })]
         })],
-  members: {type: Array, default: []},
+  members: {type: Array, default: [], required: true},
   companyName: String
 });
 
