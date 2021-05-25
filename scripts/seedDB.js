@@ -44,7 +44,7 @@ const projectSeed = [
           ]
           },
         ],
-    members: ["things 1", "hegner123@gmail.com"],
+    members: ["things 1", "michael"],
     total_arrangements: 3,
     companyName: "ABC"
   },
@@ -125,9 +125,14 @@ const projectSeed = [
             song_arrangements: ["guitar", "piano", "drum"],
             song_key: "Am",
             song_bpm: 150,
-            song_notes: [{notes:"there's no note"}]
+            song_notes: [{notes:"there's no note"}],
+            song_status: {
+              guitar: "Complete",
+              piano: "Complete",
+              drum: "Complete"
+          }
           }],
-    members: ["thing 3-1", "thing 3-2"],
+    members: ["thing 3-1", "michael"],
     total_arrangements: 3,
     companyName: "Netflix"
   },

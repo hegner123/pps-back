@@ -5,7 +5,7 @@ const projectService = require('../_helpers/project.service')
 router
   .get("/", getAll)
   .post("/", create);
-router.get("/userprojects/:id", findById)
+router.get("/:id", findById)
 
 module.exports = router;
 

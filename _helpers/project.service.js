@@ -9,7 +9,7 @@ module.exports = {
     update,
     delete: _delete
 };
- 
+
 
 
 async function getAll() {
@@ -18,7 +18,7 @@ async function getAll() {
 
 async function getById(id) {
     // console.log(Projects.findById(id))
-    return await Projects.findOne({members:id});
+    return await Projects.find({members:id});
 }
 
 async function create(ProjectsParam) {
