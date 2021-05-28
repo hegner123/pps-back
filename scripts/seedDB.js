@@ -8,7 +8,7 @@ mongoose.Promise = global.Promise;
 
 const projectSeed = [
   {
-    projectTitle: "Project1",
+    projectTitle: "Blink-183",
     songs: [{song_title: "Song Title 1",
             song_arrangements: ["guitar", "piano", "drum"],
             song_status: {guitar: "Incomplete", piano: "Incomplete", drum: "Complete"},
@@ -120,7 +120,7 @@ const projectSeed = [
     companyName: "Netflix"
   },
   {
-    projectTitle: "Project4",
+    projectTitle: "Johnny Got Dump",
     songs: [{song_title: "Song Title 4-1",
             song_arrangements: ["guitar", "piano", "drum"],
             song_key: "Am",
@@ -137,7 +137,7 @@ const projectSeed = [
     companyName: "Netflix"
   },
   {
-    projectTitle: "Project5",
+    projectTitle: "Corn off the Cob",
   songs: [{
       song_title: "Magic Mountain",
       song_arrangements: ["bass1", "drum" , "guitar1", "guitar2"],
