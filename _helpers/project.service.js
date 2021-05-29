@@ -6,7 +6,7 @@ module.exports = {
     getAll,
     getById,
     create,
-    update,
+    updateCell,
     delete: _delete
 };
 
@@ -33,18 +33,15 @@ async function create(ProjectsParam) {
     await Projects.save();
 }
 
-async function update(id, ProjectsParam) {
-    const Projects = await Projects.findById(id);
+async function updateCell({user, project, song, instrument}) {
+    return await Projects.find({"songs.song_title": [song]})
+    // const Projects = await Projects.findById(user);
+    // let CurrentProjects = Object.keys(Projects[song])
+   
+    // // copy ProjectsParam properties to Projects
+    // Object.assign(Projects[song.key].song, instrument);
 
-    // validate
-    if (!Projects) throw 'Projects not found';
-    if (Projects.ProjectsName !== ProjectsParam.ProjectsName && await Projects.findOne({ ProjectsName: ProjectsParam.ProjectsName })) {
-        throw 'ProjectsName "' + ProjectsParam.ProjectsName + '" is already taken';
-    }
-    // copy ProjectsParam properties to Projects
-    Object.assign(Projects, ProjectsParam);
-
-    await Projects.save();
+    // await Projects.save();
 }
 
 async function _delete(id) {

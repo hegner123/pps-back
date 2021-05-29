@@ -3,13 +3,29 @@ const router = express.Router();
 const projectService = require('../_helpers/project.service');
 const Project = require('../models/project.models');
 
-router.get("/", getAll)
-      .post("/", create);
-router.get("/:id", findById);
-router.post("/:id", pushSong);
+router.put('/project/:project/song/:song/instrument/:instrument/status/:status', changeCellStatus);
+router.get('/', getAll)
+      .post('/', create);
+router.get('/:id', findById);
+router.post('/:id', pushSong);
+
 
 
 module.exports = router;
+
+function changeCellStatus(req, res, next){
+// res.send('Got a PUT request at ' + req.params.user + ' ' + req.params.project +  ' ' + req.params.song + ' ' + req.params.instrument)
+projectService.updateCell({
+  project:req.params.project,
+  song:req.params.song,
+  instrument:req.params.instrument,
+  status: req.params.status
+}
+  )
+    .then(data => res.json(data))
+    .catch(err => next(err));
+
+}
 
 function getAll(req, res, next) {
   projectService.getAll(req.body)
@@ -65,21 +81,23 @@ function pushSong(req, res) {
 
 
 
-// router
-//   .get("/:id", findById)
-//   .delete("/:id", remove)
-//   .put("/:id", update);
+
 
 // router
-//   .put("/song/arrangement/:id", update);
+//   .get('/:id', findById)
+//   .delete('/:id', remove)
+//   .put('/:id', update);
 
 // router
-//   .get("/note/add/:id", findById)
-//   .put("/note/add/:id", addNote)
+//   .put('/song/arrangement/:id', update);
 
 // router
-//   .get("/note/remove/:id", findById)
-//   .put("/note/remove/:id", removeNote)
+//   .get('/note/add/:id', findById)
+//   .put('/note/add/:id', addNote)
+
+// router
+//   .get('/note/remove/:id', findById)
+//   .put('/note/remove/:id', removeNote)
 
 
 
@@ -102,7 +120,7 @@ function pushSong(req, res) {
 //       _id: req.params.id
 //     }, {
 //       $push: {
-//         ["songs." + [req.body.index] + ".song_notes"]: req.body.newNote
+//         ['songs.' + [req.body.index] + '.song_notes']: req.body.newNote
 //       }
 //     })
 //     .then(dbModel => res.json(dbModel))
@@ -115,7 +133,7 @@ function pushSong(req, res) {
 //       _id: req.params.id
 //     }, {
 //       $pull: {
-//         ["songs." + [req.body.index] + ".song_notes"]: {
+//         ['songs.' + [req.body.index] + '.song_notes']: {
 //           _id: req.body.id
 //         }
 //       }
