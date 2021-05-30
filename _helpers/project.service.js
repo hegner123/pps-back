@@ -17,7 +17,6 @@ async function getAll() {
 }
 
 async function getById(id) {
-    // console.log(Projects.findById(id))
     return await Projects.find({members:id});
 }
 
@@ -33,15 +32,19 @@ async function create(ProjectsParam) {
     await Projects.save();
 }
 
-async function updateCell({user, project, song, instrument}) {
-    return await Projects.find({"songs.song_title": [song]})
-    // const Projects = await Projects.findById(user);
-    // let CurrentProjects = Object.keys(Projects[song])
-   
-    // // copy ProjectsParam properties to Projects
-    // Object.assign(Projects[song.key].song, instrument);
+async function updateCell({project, song, instrument, status, cellId}) {
+    let update;
+    if (status === "Complete"){
+        update ="Incomplete"
+    } else {
+        update ="Complete"
+    }
+    return await Projects.updateOne({$and:[{"_id" : project},
+    { "songs":{ $elemMatch:{"_id" : song,  "song_status":{ $elemMatch:{"_id" : cellId}}}}}
+    ]},     {$set:{"songs.$[s].song_status.$[i].status":update}},
+   { arrayFilters: [ { "s._id" : song } , { "i.instrument": instrument }], multi: true}
+   )
 
-    // await Projects.save();
 }
 
 async function _delete(id) {

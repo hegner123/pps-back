@@ -3,7 +3,7 @@ const router = express.Router();
 const projectService = require('../_helpers/project.service');
 const Project = require('../models/project.models');
 
-router.put('/project/:project/song/:song/instrument/:instrument/status/:status', changeCellStatus);
+router.put('/project/:project/song/:song/instrument/:instrument/status/:status/id/:id', changeCellStatus);
 router.get('/', getAll)
       .post('/', create);
 router.get('/:id', findById);
@@ -14,12 +14,14 @@ router.post('/:id', pushSong);
 module.exports = router;
 
 function changeCellStatus(req, res, next){
+  console.log(req.body)
 // res.send('Got a PUT request at ' + req.params.user + ' ' + req.params.project +  ' ' + req.params.song + ' ' + req.params.instrument)
 projectService.updateCell({
   project:req.params.project,
   song:req.params.song,
   instrument:req.params.instrument,
-  status: req.params.status
+  status: req.params.status,
+  cellId:req.params.id,
 }
   )
     .then(data => res.json(data))

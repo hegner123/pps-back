@@ -12,7 +12,12 @@ const projectSeed = [
     projectSlug: "blink-183",
     songs: [{song_title: "song-title-1",
             song_arrangements: ["guitar", "piano", "drum"],
-            song_status: {guitar: "Incomplete", piano: "Incomplete", drum: "Complete"},
+            song_status: [{instrument:"guitar",
+                          status: "Incomplete"},
+                          { instrument:"piano",
+                            status: "Incomplete"}, 
+                          {instrument:"drum",
+                           status: "Complete"}],
             song_key: "Fm",
             song_bpm: 150,
             song_notes: [{
@@ -34,7 +39,8 @@ const projectSeed = [
           },
           {song_title: "Song Title 1-2 Piano Solo",
             song_arrangements: ["piano"],
-            song_status: {piano: "Complete"},
+            song_status: [{instrument: "piano",
+                            status: "Complete"}],
             song_key: "Am",
             song_bpm: 110,
             song_notes: [{
@@ -130,11 +136,12 @@ const projectSeed = [
             song_key: "Am",
             song_bpm: 150,
             song_notes: [{notes:"there's no note"}],
-            song_status: {
-              guitar: "Complete",
-              piano: "Complete",
-              drum: "Complete"
-          }
+            song_status: [{instrument:"guitar",
+                          status: "Incomplete"},
+                          { instrument:"piano",
+                            status: "Incomplete"}, 
+                          {instrument:"drum",
+                          status: "Complete"}],
           }],
     members: ["thing 3-1", "michael"],
     total_arrangements: 3,
@@ -151,12 +158,14 @@ const projectSeed = [
       song_notes: [{
           notes: "there's no note"
       }],
-      song_status: {
-          bass1: "Complete",
-          drum: "Complete",
-          guitar1: "Complete",
-          guitar2: "Complete"
-      }
+      song_status: [{instrument:"bass1",
+      status: "Incomplete"},
+      { instrument:"drum",
+        status: "Incomplete"}, 
+      {instrument:"guitar1",
+       status: "Incomplete"},
+       {instrument:"guitar2",
+       status: "Complete"}],
   },
   {
       song_title: "Rainbow",
@@ -166,28 +175,35 @@ const projectSeed = [
       song_notes: [{
           notes: "there's no note"
       }],
-      song_status: {
-          bass1: "Complete",
-          bgv: "Incomplete",
-          drum: "Complete",
-          guitar1: "Complete",
-          guitar2: "Incomplete",
-          vocals: "Incomplete"
-  }
+      song_status: [{instrument:"bass1",
+      status: "Incomplete"},
+      { instrument:"bgv",
+        status: "Incomplete"}, 
+      {instrument:"drum",
+       status: "Incomplete"},
+       {instrument:"guitar1",
+       status: "Complete"},
+       {instrument:"guitar2",
+       status: "Complete"},
+       {instrument:"vocals",
+       status: "Complete"}]
 },{
   song_title: "No Hardcore Dancing In The Living Room",
   song_arrangements: ["drum", "guitar1",   "guitar2", "guitar3", "orchestra"],
   song_key: "Bm",
   song_bpm: 120,
   
-  song_status: {
-
-      drum: "Complete",
-      guitar1: "Complete",
-      guitar2: "Complete",
-      guitar3 : "Incomplete",
-      orchestra : "Complete"
-  }
+  song_status: [{instrument:"drum",
+                status: "Incomplete"},
+                { instrument:"guitar1",
+                  status: "Incomplete"}, 
+                {instrument:"guitar2",
+                status: "Incomplete"},
+                {instrument:"guitar3",
+                status: "Complete"},
+                {instrument:"orchestra",
+                status: "Complete"}
+                ]
 },
 {
   song_title: "Song Title 2-2",
@@ -195,12 +211,12 @@ const projectSeed = [
   song_key: "Am",
   song_bpm: 90,
   
-  song_status: {
-
-      drum: "Complete",
-      trumpet: "Incomplete",
-      orchestra : "Complete"
-  }
+  song_status: [{instrument:"drum",
+                  status: "Complete"},
+                  {instrument:"orchestra",
+                  status: "Complete"},
+                  {instrument:"trumpet",
+                  status: "Complete"}]
 }],
   members: ["michael", "thing 5-2"],
   total_arrangements: 6,
