@@ -32,18 +32,20 @@ async function create(ProjectsParam) {
     await Projects.save();
 }
 
-async function updateCell({project, song, instrument, status, cellId}) {
+async function updateCell({project, song, instrument, status, cellId, user}) {
     let update;
     if (status === "Complete"){
         update ="Incomplete"
     } else {
         update ="Complete"
     }
-    return await Projects.updateOne({$and:[{"_id" : project},
+    await Projects.updateOne({$and:[{"_id" : project},
     { "songs":{ $elemMatch:{"_id" : song,  "song_status":{ $elemMatch:{"_id" : cellId}}}}}
     ]},     {$set:{"songs.$[s].song_status.$[i].status":update}},
    { arrayFilters: [ { "s._id" : song } , { "i.instrument": instrument }], multi: true}
    )
+
+   return await Projects.find({members:user})
 
 }
 

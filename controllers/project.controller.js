@@ -22,6 +22,7 @@ projectService.updateCell({
   instrument:req.params.instrument,
   status: req.params.status,
   cellId:req.params.id,
+  user: req.body.user
 }
   )
     .then(data => res.json(data))
