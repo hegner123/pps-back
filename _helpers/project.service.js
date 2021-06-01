@@ -18,8 +18,6 @@ async function getById(id) {
     return await Projects.find({members:id});
 }
 
-
-
 async function updateCell({project, song, instrument, status, cellId, user}) {
     let update;
     if (status === "Complete"){

@@ -5,28 +5,13 @@ const Project = require("../models/project.models");
 
 router.put('/project/:project/song/:song/instrument/:instrument/status/:status/id/:id', changeCellStatus);
 router.get('/', getAll)
-      .post('/', create);
+      .post('/', createProject);
 router.get('/:id', findById);
 router.post('/:id', pushSong);
 
 
 
 module.exports = router;
-
-function changeCellStatus(req, res, next){
-projectService.updateCell({
-  project:req.params.project,
-  song:req.params.song,
-  instrument:req.params.instrument,
-  status: req.params.status,
-  cellId:req.params.id,
-  user: req.body.user
-}
-  )
-    .then(data => res.json(data))
-    .catch(err => next(err));
-
-}
 
 function getAll(req, res, next) {
   projectService.getAll(req.body)
@@ -41,14 +26,28 @@ function findById(req, res, next) {
     .catch(err => next(err));
 }
 
-function create(req, res) {
+function createProject(req, res) {
     Project
-      .create(req.body)
+      .create(req.body.newProject)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
-  
 }
 
+function changeCellStatus(req, res, next){
+  console.log('chagneCell')
+  projectService.updateCell({
+  project:req.params.project,
+  song:req.params.song,
+  instrument:req.params.instrument,
+  status: req.params.status,
+  cellId:req.params.id,
+  user: req.body.user
+  }
+  )
+    .then(data => res.json(data))
+    .catch(err => next(err));
+
+}
 
 function pushSong(req, res) {
   const songTitle = req.body.song_title;

@@ -1,10 +1,14 @@
+const router = require("express").Router();
 const Spotify = require('node-spotify-api');
 const keys = require( '../keys');
 const spotify = new Spotify(keys.spotify)
 
+router.route("/:search").get(spotifySearch)
 
-module.exports = {
-spotifySearch: function(req, res){
+
+  module.exports = router;
+
+function spotifySearch (req, res){
 
    let  search = req.params.search;
 
@@ -27,6 +31,6 @@ spotify.search({ type: 'track', query: search }, function(err, data) {
   });
 }
 
-}
+
 
 
