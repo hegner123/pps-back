@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const projectService = require('../_helpers/project.service');
-const Project = require('../models/project.models');
+const Project = require("../models/project.models");
 
 router.put('/project/:project/song/:song/instrument/:instrument/status/:status/id/:id', changeCellStatus);
 router.get('/', getAll)
@@ -14,8 +14,6 @@ router.post('/:id', pushSong);
 module.exports = router;
 
 function changeCellStatus(req, res, next){
-  console.log(req.body)
-// res.send('Got a PUT request at ' + req.params.user + ' ' + req.params.project +  ' ' + req.params.song + ' ' + req.params.instrument)
 projectService.updateCell({
   project:req.params.project,
   song:req.params.song,
@@ -44,15 +42,15 @@ function findById(req, res, next) {
 }
 
 function create(req, res) {
-  projectService
-    .create(req.body)
-    .then(dbModel => res.json(dbModel))
-    .catch(err => res.status(422).json(err));
+    Project
+      .create(req.body)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  
 }
 
 
 function pushSong(req, res) {
-  console.log(req.body)
   const songTitle = req.body.song_title;
   const songKey = req.body.song_key;
   const songBpm = req.body.song_bpm;
@@ -60,6 +58,7 @@ function pushSong(req, res) {
   const songReferences = req.body.song_references;
   const songArrangement = req.body.song_arrangements;
   const songStatus = req.body.song_status;
+    
 
   const newSong = {
     song_title: songTitle,
@@ -68,18 +67,19 @@ function pushSong(req, res) {
     song_lyrics: songLyrics,
     song_references: songReferences,
     song_arrangements: songArrangement,
-    song_status: songStatus
-  };
-
-  projectService.update({
-    projectTitle: req.params.id
-    }, {
-      $push: {
-        songs: newSong
-      }
-    })
-    .then(dbModel => console.log(res.json(dbModel)))
-    .catch(err => res.status(422).json(err));
+    song_status : songStatus
+    };
+    
+  Project
+  .findOneAndUpdate({
+    _id: req.params.id
+  }, {
+    $push: {
+      songs: newSong
+    }
+  })
+  .then(dbModel => res.json(dbModel))
+  .catch(err => res.status(422).json(err));
 }
 
 
