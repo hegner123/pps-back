@@ -3,14 +3,14 @@ const Spotify = require('node-spotify-api');
 const keys = require( '../keys');
 const spotify = new Spotify(keys.spotify)
 
-router.route("/:search").get(spotifySearch)
+router.route("/").get(spotifySearch)
 
 
   module.exports = router;
 
 function spotifySearch (req, res){
 
-   let  search = req.params.search;
+   let  search = req.body.search;
 
 spotify.search({ type: 'track', query: search }, function(err, data) {
     if (err) {

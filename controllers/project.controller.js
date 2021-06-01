@@ -34,7 +34,6 @@ function createProject(req, res) {
 }
 
 function changeCellStatus(req, res, next){
-  console.log('chagneCell')
   projectService.updateCell({
   project:req.params.project,
   song:req.params.song,
