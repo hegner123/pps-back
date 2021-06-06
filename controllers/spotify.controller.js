@@ -3,32 +3,32 @@ const Spotify = require('node-spotify-api');
 const keys = require( '../keys');
 const spotify = new Spotify(keys.spotify)
 
-router.route("/").get(spotifySearch)
+router.route("/song/:song").get(spotifySearch)
 
 
   module.exports = router;
 
 function spotifySearch (req, res){
 
-   let  search = req.body.search;
+   let  search = req.params.song.replace(/-/g, ' ')
+   
+   console.log(search)
 
-spotify.search({ type: 'track', query: search }, function(err, data) {
-    if (err) {
-      return console.log('Error occurred: ' + err);
-    } else {
-      let resultData = data.tracks.items
-      let songArtist = data.tracks.items[0].album.artists[0].name;
-      let songName = data.tracks.items[0].name;
-      let songLink = data.tracks.items[0].external_urls.spotify;
-      const trackData = {
-        results: resultData,
-        songLink: songLink,
-        title: songName,
-        artist: songArtist
+spotify.search({ type: 'track', query: search })
+  .then(results => {
+
+    const previews = [];
+    results.tracks.items.map(item => {
+      let track ={
+      title: item.name,
+      artist: item.artists,
+      preview: item.preview_url
       }
-      res.json(trackData);
-    }
-  });
+      previews.push(track);
+      
+    });
+    res.json(previews)}
+    )
 }
 
 
