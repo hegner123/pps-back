@@ -16,10 +16,11 @@ function spotifySearch (req, res){
 
 spotify.search({ type: 'track', query: search })
   .then(results => {
-
+    console.log(results.tracks)
     const previews = [];
     results.tracks.items.map(item => {
       let track ={
+      id: item.id,
       title: item.name,
       artist: item.artists,
       preview: item.preview_url

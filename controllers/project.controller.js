@@ -7,7 +7,7 @@ router.put('/project/:project/song/:song/instrument/:instrument/status/:status/i
 router.get('/', getAll)
       .post('/', createProject);
 router.get('/:id', findById);
-router.post('/:id', pushSong);
+router.put('/songs', pushSong);
 
 
 
@@ -49,28 +49,29 @@ function changeCellStatus(req, res, next){
 }
 
 function pushSong(req, res) {
-  const songTitle = req.body.song_title;
-  const songKey = req.body.song_key;
-  const songBpm = req.body.song_bpm;
-  const songLyrics = req.body.song_lyrics;
-  const songReferences = req.body.song_references;
-  const songArrangement = req.body.song_arrangements;
-  const songStatus = req.body.song_status;
-    
+let songStatus = [];
+let songArrangement =[];
+  function Instrument(instrument){
+    this.instrument=instrument;
+    this.status = "Incomplete";
+  }
 
+
+  req.body.newSong.arrangement.forEach(inst => {
+    let data = new Instrument(inst.instrument)
+    songStatus.push(data);
+    songArrangement.push(inst.instrument);
+  })
   const newSong = {
-    song_title: songTitle,
-    song_key: songKey,
-    song_bpm: songBpm,
-    song_lyrics: songLyrics,
-    song_references: songReferences,
+    song_title: req.body.newSong.songTitle,
+    song_references: req.body.newSong.references,
     song_arrangements: songArrangement,
-    song_status : songStatus
+    song_status: songStatus
     };
-    
+    console.log(newSong)
   Project
   .findOneAndUpdate({
-    _id: req.params.id
+    _id: req.body.newSong.id
   }, {
     $push: {
       songs: newSong
