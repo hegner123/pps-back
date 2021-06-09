@@ -7,7 +7,7 @@ module.exports = {
     getAll,
     getById,
     updateCell,
-    delete: _delete
+    deleteOne: _delete
 };
 
 async function getAll() {
@@ -35,5 +35,5 @@ async function updateCell({project, song, instrument, status, cellId, user}) {
 }
 
 async function _delete(id) {
-    await Projects.findByIdAndRemove(id);
+   return await Projects.findByIdAndRemove(id);
 }

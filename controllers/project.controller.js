@@ -5,7 +5,8 @@ const Project = require("../models/project.models");
 
 router.put('/project/:project/song/:song/instrument/:instrument/status/:status/id/:id', changeCellStatus);
 router.get('/', getAll)
-      .post('/', createProject);
+      .post('/', createProject)
+      .delete('/', deleteProject)
 router.get('/:id', findById);
 router.put('/songs', pushSong);
 
@@ -31,6 +32,14 @@ function createProject(req, res) {
       .create(req.body.newProject)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
+}
+
+function deleteProject(req, res) {
+  console.log(req.body.project)
+  Project
+    .deleteOne(req.body.project)
+    .then(dbModel => res.json(dbModel))
+    .catch(err => res.status(422).json(err));
 }
 
 function changeCellStatus(req, res, next){
