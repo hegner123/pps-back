@@ -28,7 +28,7 @@ function findById(req, res, next) {
 }
 
 function createProject(req, res) {
-    Project
+  Project
       .create(req.body.newProject)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
@@ -36,8 +36,8 @@ function createProject(req, res) {
 
 function deleteProject(req, res) {
   console.log(req.body.project)
-  Project
-    .deleteOne(req.body.project)
+  projectService
+    .delete(req.body.project)
     .then(dbModel => res.json(dbModel))
     .catch(err => res.status(422).json(err));
 }

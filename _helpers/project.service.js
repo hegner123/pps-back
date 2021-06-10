@@ -7,7 +7,7 @@ module.exports = {
     getAll,
     getById,
     updateCell,
-    deleteOne: _delete
+    delete: _delete
 };
 
 async function getAll() {
@@ -30,10 +30,10 @@ async function updateCell({project, song, instrument, status, cellId, user}) {
     ]},     {$set:{"songs.$[s].song_status.$[i].status":update}},
    { arrayFilters: [ { "s._id" : song } , { "i.instrument": instrument }], multi: true}
    )
-  
-   
+
 }
 
 async function _delete(id) {
-   return await Projects.findByIdAndRemove(id);
+    console.log( 'id:  '+id.id)
+   return await Projects.findByIdAndRemove({_id:id.id});
 }
