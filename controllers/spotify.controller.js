@@ -11,12 +11,9 @@ router.route("/song/:song").get(spotifySearch)
 function spotifySearch (req, res){
 
    let  search = req.params.song.replace(/-/g, ' ')
-   
-   console.log(search)
 
 spotify.search({ type: 'track', query: search })
   .then(results => {
-    console.log(results.tracks)
     const previews = [];
     results.tracks.items.map(item => {
       let track ={

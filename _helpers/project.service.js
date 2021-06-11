@@ -1,5 +1,5 @@
 ﻿const config = require('config.json');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const db = require('_helpers/db');
 const Projects = db.Project;
 
@@ -21,19 +21,17 @@ async function getById(id) {
 async function updateCell({project, song, instrument, status, cellId, user}) {
     let update;
     if (status === "Complete"){
-        update ="Incomplete"
+        update = "Incomplete"
     } else {
-        update ="Complete"
+        update = "Complete"
     }
      await Projects.updateOne({$and:[{"_id" : project},
     { "songs":{ $elemMatch:{"_id" : song,  "song_status":{ $elemMatch:{"_id" : cellId}}}}}
     ]},     {$set:{"songs.$[s].song_status.$[i].status":update}},
    { arrayFilters: [ { "s._id" : song } , { "i.instrument": instrument }], multi: true}
    )
-
 }
 
 async function _delete(id) {
-    console.log( 'id:  '+id.id)
-   return await Projects.findByIdAndRemove({_id:id.id});
+   return await Projects.findByIdAndRemove({_id:id});
 }

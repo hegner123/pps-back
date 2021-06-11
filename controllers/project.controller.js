@@ -2,13 +2,16 @@ const express = require('express');
 const router = express.Router();
 const projectService = require('../_helpers/project.service');
 const Project = require("../models/project.models");
+const db = require('_helpers/db');
+const Projects = db.Project;
 
 router.put('/project/:project/song/:song/instrument/:instrument/status/:status/id/:id', changeCellStatus);
 router.get('/', getAll)
       .post('/', createProject)
       .delete('/', deleteProject)
 router.get('/:id', findById);
-router.put('/songs', pushSong);
+router.put('/songs', pushSong)
+      .delete('/songs', deleteSong)
 
 
 
@@ -35,9 +38,9 @@ function createProject(req, res) {
 }
 
 function deleteProject(req, res) {
-  console.log(req.body.project)
+  
   projectService
-    .delete(req.body.project)
+    .delete(req.body.project.id)
     .then(dbModel => res.json(dbModel))
     .catch(err => res.status(422).json(err));
 }
@@ -64,8 +67,6 @@ let songArrangement =[];
     this.instrument=instrument;
     this.status = "Incomplete";
   }
-
-
   req.body.newSong.arrangement.forEach(inst => {
     let data = new Instrument(inst.instrument)
     songStatus.push(data);
@@ -77,7 +78,6 @@ let songArrangement =[];
     song_arrangements: songArrangement,
     song_status: songStatus
     };
-    console.log(newSong)
   Project
   .findOneAndUpdate({
     _id: req.body.newSong.id
@@ -89,6 +89,18 @@ let songArrangement =[];
   .then(dbModel => res.json(dbModel))
   .catch(err => res.status(422).json(err));
 }
+
+function deleteSong(req, res) {
+  Projects
+    .findOneAndUpdate({
+      _id: req.body.id
+    }, { $pull: {"songs":{_id : req.body.songs}}})
+    .then(dbModel => res.json(dbModel))
+    .catch(err => res.status(422).json(err))
+
+
+}
+
 
 
 
