@@ -25,11 +25,13 @@ async function updateCell({project, song, instrument, status, cellId, user}) {
     } else {
         update = "Complete"
     }
-     await Projects.updateOne({$and:[{"_id" : project},
+   await Projects.updateOne({$and:[{"_id" : project},
     { "songs":{ $elemMatch:{"_id" : song,  "song_status":{ $elemMatch:{"_id" : cellId}}}}}
     ]},     {$set:{"songs.$[s].song_status.$[i].status":update}},
    { arrayFilters: [ { "s._id" : song } , { "i.instrument": instrument }], multi: true}
    )
+
+   return [cellId, update]
 }
 
 async function _delete(id) {
