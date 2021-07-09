@@ -12,8 +12,8 @@ function jwt() {
             '/users/authenticate',
             '/users/register',
             '/song-preview/',
-            '/projects/songs/',
-            '/projects/'
+            '/users/add'
+
         ]
     });
 }

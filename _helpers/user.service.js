@@ -10,6 +10,7 @@ module.exports = {
     getById,
     create,
     update,
+    addToRecent,
     delete: _delete
 };
  
@@ -67,6 +68,16 @@ async function update(id, userParam) {
     Object.assign(user, userParam);
 
     await user.save();
+}
+
+
+async function addToRecent(userId, projectId) {
+    return await User.updateMany({"_id" : userId},
+    {$set:{"recentProjects":{ "recentID": projectId}}},
+    {
+        upsert: true}
+    );
+    
 }
 
 async function _delete(id) {

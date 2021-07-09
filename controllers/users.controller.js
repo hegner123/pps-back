@@ -6,6 +6,7 @@ const userService = require('../_helpers/user.service');
 router.post('/authenticate', authenticate);
 router.post('/register', register);
 router.put('/:id', update);
+router.put('/addtorecent/:id', add);
 router.delete('/:id', _delete);
 
 module.exports = router;
@@ -14,6 +15,7 @@ function authenticate(req, res, next) {
     userService.authenticate(req.body)
         .then(user => user ? res.json(user) : res.status(400).json({ message: 'Username or password is incorrect' }))
         .catch(err => next(err));
+    console.log("test")
 }
 
 function register(req, res, next) {
@@ -27,6 +29,15 @@ function update(req, res, next) {
     userService.update(req.params.id, req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
+}
+
+function add(req, res, next){
+    console.log(req.body);
+    console.log(req.params.id);
+
+    userService.addToRecent(req.params.id, req.body._id )
+    .then(()=> res.json({}))
+    .catch(err => next(err));
 }
 
 function _delete(req, res, next) {

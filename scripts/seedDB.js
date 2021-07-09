@@ -51,7 +51,7 @@ const projectSeed = [
           ]
           },
         ],
-    members: ["things 1", "michael"],
+    members: ["things 1", "60e497a1279462f0bac92dab"],
     total_arrangements: 3,
     companyName: "ABC"
   },
@@ -143,7 +143,7 @@ const projectSeed = [
                           {instrument:"drum",
                           status: "Complete"}],
           }],
-    members: ["thing 3-1", "michael"],
+    members: ["thing 3-1", "60e497a1279462f0bac92dab"],
     total_arrangements: 3,
     companyName: "Netflix"
   },
@@ -218,7 +218,7 @@ const projectSeed = [
                   {instrument:"trumpet",
                   status: "Complete"}]
 }],
-  members: ["michael", "thing 5-2"],
+  members: ["60e497a1279462f0bac92dab", "thing 5-2"],
   total_arrangements: 6,
   companyName: "Netflix"
   }]

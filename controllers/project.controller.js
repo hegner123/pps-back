@@ -38,7 +38,6 @@ function createProject(req, res) {
 }
 
 function deleteProject(req, res) {
-  
   projectService
     .delete(req.body.project.id)
     .then(dbModel => res.json(dbModel))
@@ -97,6 +96,5 @@ function deleteSong(req, res) {
     }, { $pull: {"songs":{_id : req.body.songs}}})
     .then(dbModel => res.json(dbModel))
     .catch(err => res.status(422).json(err))
-
-
 }
+
