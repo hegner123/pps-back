@@ -1,33 +1,33 @@
 {
-    "name": "proproject-studio",
-    "version": "0.0.1",
-    "description": "Album Recording project management",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/hegner123/pps-back"
-    },
-    "scripts": {
-        "start": "node ./server.js",
-        "start:dev": "nodemon ./server.js",
-        "seed": "node scripts/seedDB.js"
-    },
-    "dependencies": {
-        "bcryptjs": "^2.4.3",
-        "cors": "^2.8.5",
-        "dotenv": "^8.6.0",
-        "express": "^4.17.1",
-        "express-jwt": "^6.0.0",
-        "is-empty": "^1.2.0",
-        "jsonwebtoken": "^8.5.1",
-        "mongodb": "^3.6.6",
-        "mongoose": "^5.12.7",
-        "multer": "^1.4.2",
-        "node-spotify-api": "^1.1.1",
-        "rootpath": "^0.1.2",
-        "validator": "^13.6.0"
-    },
-    "devDependencies": {
-        "nodemon": "^2.0.7"
-    }
+  "name": "proproject-studio",
+  "version": "0.0.1",
+  "description": "Album Recording project management",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hegner123/pps-back"
+  },
+  "scripts": {
+    "start": "node ./server.js",
+    "start:dev": "nodemon ./server.js",
+    "seed": "node scripts/seedDB.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.6.0",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "is-empty": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.6.6",
+    "mongoose": "^5.12.7",
+    "multer": "^1.4.2",
+    "node-spotify-api": "^1.1.1",
+    "rootpath": "^0.1.2",
+    "validator": "^13.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
 }

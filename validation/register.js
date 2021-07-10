@@ -13,22 +13,21 @@ module.exports = function validateRegisterInput(data) {
   // Name checks
   if (Validator.isEmpty(data.firstName)) {
     errors.firstName = "Name field is required";
-  };
+  }
 
-  
   if (Validator.isEmpty(data.lastName)) {
     errors.lastName = "Name field is required";
-  };
+  }
 
   // Email checks
   if (Validator.isEmpty(data.userName)) {
     errors.userName = "Username field is required";
-  };
+  }
 
   // Password checks
   if (Validator.isEmpty(data.hash)) {
     errors.hash = "Password field is required";
-  };
+  }
 
   // if (!Validator.isLength(data.hash, { min: 6, max: 30 })) {
   //   errors.hash = "Password must be at least 6 characters";
@@ -36,6 +35,6 @@ module.exports = function validateRegisterInput(data) {
 
   return {
     errors,
-    isValid: isEmpty(errors)
+    isValid: isEmpty(errors),
   };
 };

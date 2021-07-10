@@ -1,29 +1,33 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
-
 const ProjectSchema = new Schema({
   projectTitle: { type: String, required: true },
-  projectSlug: { type: String, required: true},
-  songs: [ new Schema ({
-            song_title: String,
-            song_arrangements: {type: Array, default: []},
-            song_status: [new Schema ({
-                  instrument: String,
-                  status: String,
-            })],
-            song_lyrics: String,
-            song_key: String,
-            song_bpm: Number,
-            song_references:  {type: Array, default: []},
-            song_notes: [new Schema ({
-                  noteTitle: String,
-                  noteBody: String,
-            })]
-        })],
-  members: {type: Array, default: [], required: true},
-  companyName: String
+  projectSlug: { type: String, required: true },
+  songs: [
+    new Schema({
+      song_title: String,
+      song_arrangements: { type: Array, default: [] },
+      song_status: [
+        new Schema({
+          instrument: String,
+          status: String,
+        }),
+      ],
+      song_lyrics: String,
+      song_key: String,
+      song_bpm: Number,
+      song_references: { type: Array, default: [] },
+      song_notes: [
+        new Schema({
+          noteTitle: String,
+          noteBody: String,
+        }),
+      ],
+    }),
+  ],
+  members: { type: Array, default: [], required: true },
+  companyName: String,
 });
 
 module.exports = Project = mongoose.model("projects", ProjectSchema);

@@ -1,4 +1,4 @@
 ﻿{
-    "connectionString": "mongodb://localhost/pps-backend",
-    "secret": "amndgan"
+  "connectionString": "mongodb://localhost/pps-backend",
+  "secret": "amndgan"
 }

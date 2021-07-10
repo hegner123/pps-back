@@ -11,7 +11,7 @@ module.exports = function validateLoginInput(data) {
   // userName checks
   if (Validator.isEmpty(data.userName)) {
     errors.userName = "UserName field is required";
-  } 
+  }
   // Password checks
   if (Validator.isEmpty(data.hash)) {
     errors.hash = "Password field is required";
@@ -19,6 +19,6 @@ module.exports = function validateLoginInput(data) {
 
   return {
     errors,
-    isValid: isEmpty(errors)
+    isValid: isEmpty(errors),
   };
 };
