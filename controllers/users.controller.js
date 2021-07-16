@@ -21,7 +21,6 @@ function authenticate(req, res, next) {
         : res.status(400).json({ message: "Username or password is incorrect" })
     )
     .catch((err) => next(err));
-  console.log("test");
 }
 
 function getById(req, res, next) {
@@ -46,7 +45,6 @@ function update(req, res, next) {
 }
 
 function add(req, res, next) {
-  console.log("add");
   userService
     .addToRecent(req.params.id, req.body._id)
     .then(() => res.json({}))

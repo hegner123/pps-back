@@ -94,8 +94,4 @@ async function _delete(id) {
   await User.findByIdAndRemove(id);
 }
 
-// console.log(
-//   addToRecent("60e497a1279462f0bac92dab", "60e6df6dd4c2001cef4bc877")
-//     .then((prom) => console.log(prom))
-//     .then(getById("60e497a1279462f0bac92dab").then((prom) => console.log(prom)))
-// );
+
