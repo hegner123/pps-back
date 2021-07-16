@@ -76,11 +76,16 @@ async function update(id, userParam) {
 }
 
 async function addToRecent(userId, projectId) {
-  return await User.updateMany(
+  return await User.updateOne(
     { _id: userId },
-    { $set: { recentProjects: { recentID: projectId } } },
     {
-      upsert: true,
+      $push: {
+        recentProjects: {
+          $each: [{ recentID: projectId }],
+          $slice: 3,
+          $sort: -1,
+        },
+      },
     }
   );
 }
@@ -88,3 +93,9 @@ async function addToRecent(userId, projectId) {
 async function _delete(id) {
   await User.findByIdAndRemove(id);
 }
+
+// console.log(
+//   addToRecent("60e497a1279462f0bac92dab", "60e6df6dd4c2001cef4bc877")
+//     .then((prom) => console.log(prom))
+//     .then(getById("60e497a1279462f0bac92dab").then((prom) => console.log(prom)))
+// );

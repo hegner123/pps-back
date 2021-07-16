@@ -4,6 +4,7 @@ const userService = require("../_helpers/user.service");
 
 // routes
 router.post("/authenticate", authenticate);
+router.get("/:id", getById);
 router.post("/register", register);
 router.put("/:id", update);
 router.put("/addtorecent/:id", add);
@@ -23,6 +24,13 @@ function authenticate(req, res, next) {
   console.log("test");
 }
 
+function getById(req, res, next) {
+  userService
+    .getById(req.params.id)
+    .then(() => res.json({}))
+    .catch((err) => next(err));
+}
+
 function register(req, res, next) {
   userService
     .create(req.body)
@@ -38,9 +46,7 @@ function update(req, res, next) {
 }
 
 function add(req, res, next) {
-  console.log(req.body);
-  console.log(req.params.id);
-
+  console.log("add");
   userService
     .addToRecent(req.params.id, req.body._id)
     .then(() => res.json({}))
