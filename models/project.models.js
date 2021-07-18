@@ -27,6 +27,7 @@ const ProjectSchema = new Schema({
     new Schema(
       {
         user: String,
+        type: String,
         activity: {
           action: String,
           project: String,

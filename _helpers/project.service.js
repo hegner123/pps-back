@@ -55,7 +55,7 @@ async function updateCell({ project, song, instrument, status, cellId, user }) {
     }
   );
 
-  console.log(addActivity(project, user, activity));
+  console.log(addActivity(project, user, activity, "update"));
 
   return [cellId, update];
 }
@@ -64,8 +64,8 @@ async function _delete(id) {
   return await Projects.findByIdAndRemove({ _id: id });
 }
 
-async function addActivity(project, userId, activity) {
-  return  Projects.updateOne(
+async function addActivity(project, userId, activity, type) {
+  return Projects.updateOne(
     { _id: project },
     {
       $push: {
@@ -73,6 +73,7 @@ async function addActivity(project, userId, activity) {
           $each: [
             {
               user: userId,
+              type: type,
               activity: activity,
             },
           ],
