@@ -20,11 +20,20 @@ async function getById(id) {
 
 async function updateCell({ project, song, instrument, status, cellId, user }) {
   let update;
+
   if (status === "Complete") {
     update = "Incomplete";
   } else {
     update = "Complete";
   }
+  let activity = {
+    action: update,
+    project: project,
+    song: song,
+    instrument: instrument,
+    misc: cellId,
+  };
+  console.log(activity);
   await Projects.updateOne(
     {
       $and: [
@@ -46,9 +55,31 @@ async function updateCell({ project, song, instrument, status, cellId, user }) {
     }
   );
 
+  console.log(addActivity(project, user, activity));
+
   return [cellId, update];
 }
 
 async function _delete(id) {
   return await Projects.findByIdAndRemove({ _id: id });
+}
+
+async function addActivity(project, userId, activity) {
+  return  Projects.updateOne(
+    { _id: project },
+    {
+      $push: {
+        recent_activity: {
+          $each: [
+            {
+              user: userId,
+              activity: activity,
+            },
+          ],
+          $slice: 10,
+          $sort: -1,
+        },
+      },
+    }
+  );
 }

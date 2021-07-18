@@ -43,6 +43,7 @@ function deleteProject(req, res) {
 }
 
 function changeCellStatus(req, res, next) {
+  console.log(req.body.user);
   projectService
     .updateCell({
       project: req.params.project,
@@ -98,3 +99,18 @@ function deleteSong(req, res) {
     .then((dbModel) => res.json(dbModel))
     .catch((err) => res.status(422).json(err));
 }
+
+// recent_activity: [
+//     new Schema(
+//       {
+//         user: String,
+//         activity: {
+//           action: String,
+//           project: String,
+//           song: String,
+//           instrument: String,
+//           misc: String,
+//         },
+//       },
+//       { timestamps: { createdAt: "created_at" } }
+//     ),
