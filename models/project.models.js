@@ -3,7 +3,12 @@ const Schema = mongoose.Schema;
 
 const ProjectSchema = new Schema({
   companyName: String,
-  members: { type: Array, default: [], required: true },
+  members: [
+    new Schema({
+      id: { type: String, required: true },
+      username: { type: String, required: true },
+    }),
+  ],
   projectTitle: { type: String, required: true },
   projectSlug: { type: String, required: true },
   songs: [
@@ -12,8 +17,8 @@ const ProjectSchema = new Schema({
       song_arrangements: { type: Array, default: [] },
       song_status: [
         new Schema({
-          instrument: String,
-          status: String,
+          instrument: { type: String, required: true },
+          status: { type: String, required: true },
         }),
       ],
       song_lyrics: String,
@@ -26,8 +31,9 @@ const ProjectSchema = new Schema({
   recent_activity: [
     new Schema(
       {
-        user: String,
-        type: String,
+        user: { type: String, required: true },
+        type: { type: String, required: true },
+        read: Boolean,
         activity: {
           action: String,
           project: String,

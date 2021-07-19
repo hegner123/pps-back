@@ -1,6 +1,8 @@
 ﻿const express = require("express");
 const router = express.Router();
 const userService = require("../_helpers/user.service");
+const db = require("_helpers/db");
+const Users = db.User;
 
 // routes
 router.post("/authenticate", authenticate);
@@ -24,9 +26,8 @@ function authenticate(req, res, next) {
 }
 
 function getById(req, res, next) {
-  userService
-    .getById(req.params.id)
-    .then(() => res.json({}))
+  Users.find({ _id: req.params.id })
+    .then((data) => res.json(data))
     .catch((err) => next(err));
 }
 

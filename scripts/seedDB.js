@@ -15,6 +15,8 @@ mongoose.Promise = global.Promise;
 
 const projectSeed = [
   {
+    companyName: "ABC",
+    members: [{ id: "60f17f1576fc292fbc8f42e3", username: "Michael" }],
     projectTitle: "Blink-183",
     projectSlug: "blink-183",
     songs: [
@@ -52,20 +54,14 @@ const projectSeed = [
         song_status: [{ instrument: "piano", status: "Complete" }],
         song_key: "Am",
         song_bpm: 110,
-        song_notes: [
-          {
-            noteTitle: "Song Title 1-2 - piano",
-            noteBody: "note for song 1-2 piano solo",
-            noteStatus: "Complete",
-          },
-        ],
       },
     ],
-    members: ["things 1", "60e497a1279462f0bac92dab"],
+
     total_arrangements: 3,
-    companyName: "ABC",
   },
   {
+    companyName: "Verizon",
+    members: [{ id: "60f17f1576fc292fbc8f42e3", username: "Michael" }],
     projectTitle: "Project2",
     projectSlug: "project2",
     songs: [
@@ -80,35 +76,6 @@ const projectSeed = [
         ],
         song_key: "Bm",
         song_bpm: 120,
-        song_notes: [
-          {
-            noteTitle: "Song Title 2-1 - guitar1",
-            noteBody: "there's no note 2-1",
-            noteStatus: "Complete",
-          },
-          {
-            noteTitle: "Song Title 2-1 orchestra ",
-            noteBody: "2-1 orchestra note",
-            noteStatus: "Complete",
-          },
-          {
-            noteTitle: "Song Title 2-1 drum ",
-            noteBody: "2-1 drum note",
-            noteStatus: "Incomplete",
-          },
-          {
-            noteTitle: "Song Title 2-1 guitar2 ",
-            noteBody: "2-1 guitar2 note",
-            noteStatus: "Complete",
-          },
-          {
-            noteTitle: "Song Title 2-1 guitar3",
-            noteBody: "2-1 guitar3 note",
-            noteStatus: "Complete",
-          },
-        ],
-      },
-      {
         song_title: "Song Title 2-2",
         song_arrangements: ["drum", "orchestra", "trumpet"],
         song_key: "Am",
@@ -132,11 +99,12 @@ const projectSeed = [
         ],
       },
     ],
-    members: ["member 1", "member 2"],
+
     total_arrangements: 6,
-    companyName: "Verizon",
   },
   {
+    companyName: "Netflix",
+    members: [{ id: "60f17f1576fc292fbc8f42e3", username: "Michael" }],
     projectTitle: "Project3",
     projectSlug: "project3",
     songs: [
@@ -145,14 +113,19 @@ const projectSeed = [
         song_arrangements: ["guitar", "piano", "drum"],
         song_key: "Fm",
         song_bpm: 150,
-        song_notes: [{ notes: "there's no note" }],
+        song_status: [
+          { instrument: "guitar", status: "Incomplete" },
+          { instrument: "piano", status: "Incomplete" },
+          { instrument: "drum", status: "Complete" },
+        ],
       },
     ],
-    members: ["thing 3-1", "thing 3-2"],
+
     total_arrangements: 3,
-    companyName: "Netflix",
   },
   {
+    companyName: "Netflix",
+    members: [{ id: "60f17f1576fc292fbc8f42e3", username: "Michael" }],
     projectTitle: "Johnny Got Dump",
     projectSlug: "johnny-got-dump",
     songs: [
@@ -168,12 +141,25 @@ const projectSeed = [
           { instrument: "drum", status: "Complete" },
         ],
       },
+      {
+        song_title: "Song Title 6",
+        song_arrangements: ["guitar", "piano", "drum"],
+        song_key: "Am",
+        song_bpm: 150,
+        song_notes: [{ notes: "there's no note" }],
+        song_status: [
+          { instrument: "guitar", status: "Incomplete" },
+          { instrument: "piano", status: "Incomplete" },
+          { instrument: "drum", status: "Incomplete" },
+        ],
+      },
     ],
-    members: ["thing 3-1", "60e497a1279462f0bac92dab"],
+
     total_arrangements: 3,
-    companyName: "Netflix",
   },
   {
+    companyName: "Netflix",
+    members: [{ id: "60f17f1576fc292fbc8f42e3", username: "Michael" }],
     projectTitle: "Corn off the Cob",
     projectSlug: "corn-off-the-cob",
     songs: [
@@ -253,16 +239,14 @@ const projectSeed = [
         ],
       },
     ],
-    members: ["60e497a1279462f0bac92dab", "thing 5-2"],
+
     total_arrangements: 6,
-    companyName: "Netflix",
   },
 ];
 Project.deleteMany({})
   .then((res) => {
     console.log(res);
-    Project.insertMany(projectSeed)
-    .then((data) => {
+    Project.insertMany(projectSeed).then((data) => {
       console.log(data + " records inserted!");
       process.exit(0);
     });

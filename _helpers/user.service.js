@@ -83,7 +83,7 @@ async function addToRecent(userId, projectId) {
         recentProjects: {
           $each: [{ recentID: projectId }],
           $slice: 3,
-          $sort: -1,
+          $sort: 1,
         },
       },
     }
@@ -93,5 +93,3 @@ async function addToRecent(userId, projectId) {
 async function _delete(id) {
   await User.findByIdAndRemove(id);
 }
-
-
