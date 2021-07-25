@@ -9,7 +9,7 @@ require("dotenv").config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(jwt());
+// app.use(jwt());
 
 app.use("/users", require("./controllers/users.controller"));
 app.use("/projects", require("./controllers/project.controller"));

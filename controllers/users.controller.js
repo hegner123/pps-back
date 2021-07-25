@@ -6,7 +6,7 @@ const Users = db.User;
 
 // routes
 router.post("/authenticate", authenticate);
-router.get("/:id", getById);
+router.get("/:id", getUser);
 router.post("/register", register);
 router.put("/:id", update);
 router.put("/addtorecent/:id", add);
@@ -25,8 +25,10 @@ function authenticate(req, res, next) {
     .catch((err) => next(err));
 }
 
-function getById(req, res, next) {
-  Users.find({ _id: req.params.id })
+function getUser(req, res, next) {
+  console.log(req.params.id);
+  userService
+    .getById({ _id: req.params.id })
     .then((data) => res.json(data))
     .catch((err) => next(err));
 }

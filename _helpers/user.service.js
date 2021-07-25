@@ -6,7 +6,6 @@ const User = db.User;
 
 module.exports = {
   authenticate,
-  getAll,
   getById,
   create,
   update,
@@ -20,19 +19,20 @@ async function authenticate({ userName, hash }) {
     const token = jwt.sign({ sub: user.id }, config.secret, {
       expiresIn: "7d",
     });
-    return {
-      ...user.toJSON(),
-      token,
-    };
+    return { ...user.toJSON(), token };
   }
 }
 
-async function getAll() {
-  return await User.find();
-}
-
 async function getById(id) {
-  return await User.findById(id);
+  const user = await User.findOne(id);
+  if (user) {
+    const token = jwt.sign({ sub: user.id }, config.secret, {
+      expiresIn: "7d",
+    });
+    if (user) {
+      return { ...user.toJSON(), token };
+    }
+  }
 }
 
 async function create(userParam) {
@@ -76,18 +76,22 @@ async function update(id, userParam) {
 }
 
 async function addToRecent(userId, projectId) {
-  return await User.updateOne(
+  console.log("projectId", projectId);
+  console.log("userId", userId);
+  const user = await User.updateOne(
     { _id: userId },
     {
       $push: {
         recentProjects: {
           $each: [{ recentID: projectId }],
           $slice: 3,
-          $sort: 1,
+          $sort: -1,
         },
       },
     }
   );
+
+  return user;
 }
 
 async function _delete(id) {
