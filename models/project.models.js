@@ -27,6 +27,7 @@ const ProjectSchema = new Schema({
       song_references: { type: Array, default: [] },
     }),
   ],
+  project_arrangement: { type: Array, default: [] },
 
   recent_activity: [
     new Schema(
