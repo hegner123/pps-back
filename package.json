@@ -26,6 +26,8 @@
     "mongoose": "^5.12.7",
     "multer": "^1.4.2",
     "node-spotify-api": "^1.1.1",
+    "nodemailer": "^6.6.3",
+    "nodemailer-smtp-transport": "^2.7.4",
     "rootpath": "^0.1.2",
     "validator": "^13.6.0"
   },
