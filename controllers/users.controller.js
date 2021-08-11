@@ -1,8 +1,7 @@
 ﻿const express = require("express");
 const router = express.Router();
 const userService = require("../_helpers/user.service");
-const db = require("_helpers/db");
-const Users = db.User;
+
 
 // routes
 router.post("/authenticate", authenticate);
@@ -11,6 +10,7 @@ router.post("/register", register);
 router.put("/:id", update);
 router.put("/addtorecent/:id", add);
 router.delete("/:id", _delete);
+router.get("/confirm/:confirmationCode", confirm);
 
 module.exports = router;
 
@@ -36,6 +36,14 @@ function getUser(req, res, next) {
 function register(req, res, next) {
   userService
     .create(req.body)
+    .then(() => res.json({}))
+    .then(() => {})
+    .catch((err) => next(err));
+}
+
+function confirm(req, res, next) {
+  userService
+    .confirm(req.body)
     .then(() => res.json({}))
     .catch((err) => next(err));
 }

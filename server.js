@@ -10,11 +10,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 // app.use(jwt());
+// email.controllerSendMail('Michael', '123456789');
 
 app.use("/users", require("./controllers/users.controller"));
 app.use("/projects", require("./controllers/project.controller"));
 app.use("/song-preview", require("./controllers/spotify.controller"));
-email.controllerSendMail();
+
 // global error handler
 app.use(errorHandler);
 

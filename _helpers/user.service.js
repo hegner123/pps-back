@@ -1,4 +1,5 @@
 ﻿const config = require("config.json");
+const mail = require("./node.mailer");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const db = require("_helpers/db");
@@ -40,16 +41,28 @@ async function create(userParam) {
   if (await User.findOne({ userName: userParam.userName })) {
     throw 'UserName "' + userParam.userName + '" is already taken';
   }
-
-  const user = new User(userParam);
-
-  // hash hash
-  if (userParam.hash) {
-    user.hash = bcrypt.hashSync(userParam.hash, 10);
+  if (await User.findOne({ email: userParam.email })) {
+    throw 'Email "' + userParam.email + '" is already taken';
   }
+
+  const token = jwt.sign({ email: userParam.email });
+
+  const user = new User({
+    username: userParam.username,
+    email: userParam.email,
+    firstName: userParam.firstName,
+    lastName: userParam.lastName,
+    password: bcrypt.hashSync(userParam.password, 8),
+    confirmationCode: token,
+  });
 
   // save user
   await user.save();
+  mail.sendMail(userParam.firstName, userParam.email, token);
+}
+
+async function confirmAccount() {
+  User.findOne({});
 }
 
 async function update(id, userParam) {

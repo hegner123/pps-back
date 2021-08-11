@@ -20,30 +20,30 @@ function find(req, res, next) {
     .catch((err) => next(err));
 }
 
-function createProject(req, res) {
-  let activity = {
-    action: "New Project",
-    project: req.body.newProject.projectTitle,
-    song: "",
-    instrument: "",
-    misc: "",
-  };
+function createProject(req, res, next) {
+  // let activity = {
+  //   action: "New Project",
+  //   project: req.body.newProject.projectTitle,
+  //   song: "",
+  //   instrument: "",
+  //   misc: "",
+  // };
 
   Projects.create(req.body.newProject)
     .then((dbModel) => {
       console.log(dbModel);
-      projectServiceaddActivity(
-        dbModel._id,
-        dbModel.members[0],
-        activity,
-        "New Project"
-      );
+      // projectServiceaddActivity(
+      //   dbModel._id,
+      //   dbModel.members[0],
+      //   activity,
+      //   "New Project"
+      // );
       res.json(dbModel);
     })
     .catch((err) => res.status(422).json(err));
 }
 
-function deleteProject(req, res) {
+function deleteProject(req, res, next) {
   projectService
     .delete(req.body.project.id)
     .then((dbModel) => res.json(dbModel))
@@ -90,7 +90,7 @@ function changeCellStatus(req, res, next) {
   // addActivity(params.project, req.body.user, activity, "update");
 }
 
-function pushSong(req, res) {
+function pushSong(req, res, next) {
   let songStatus = [];
   let songArrangement = [];
   function Instrument(instrument) {
@@ -122,7 +122,7 @@ function pushSong(req, res) {
     .catch((err) => res.status(422).json(err));
 }
 
-function deleteSong(req, res) {
+function deleteSong(req, res, next) {
   Projects.findOneAndUpdate(
     {
       _id: req.body.id,
