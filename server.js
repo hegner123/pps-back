@@ -1,4 +1,5 @@
 ﻿require("rootpath")();
+const colors = require("colors");
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -14,12 +15,12 @@ app.use(cors());
 app.use("/users", require("./controllers/users.controller"));
 app.use("/projects", require("./controllers/project.controller"));
 app.use("/song-preview", require("./controllers/spotify.controller"));
-email.controllerSendMail();
+// email.controllerSendMail();
 // global error handler
 app.use(errorHandler);
 
 const port =
   process.env.NODE_ENV === "production" ? process.env.PORT || 80 : 4000;
 const server = app.listen(port, function () {
-  console.log("Server listening on port " + port);
+  console.log(colors.brightBlue(`Server listening on port ${port} 🥳`));
 });

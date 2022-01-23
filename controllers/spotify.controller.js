@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Spotify = require("node-spotify-api");
 const keys = require("../keys");
-console.log(keys);
+
 const spotify = new Spotify(keys.spotify);
 
 router.route("/song/:song").get(spotifySearch);

@@ -1,20 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const Project = require("../models/project.models");
 const db = require("_helpers/db");
 const Projects = db.Project;
 
-router.put(
-  "/project/:project/song/:song/instrument/:instrument/status/:status/id/:id",
-  changeCellStatus
-);
+router.put("/update", changeCellStatus);
+router.get("/:id", getProjects);
 router.post("/", createProject).delete("/", deleteProject);
-router.get("/:id", find);
-router.put("/songs", pushSong).delete("/songs", deleteSong);
+router.put("/songs", createSong).delete("/songs", deleteSong);
 
 module.exports = router;
 
-function find(req, res, next) {
+function getProjects(req, res, next) {
   Projects.find({ "members.id": req.params.id })
     .then((project) => (project ? res.json(project) : res.sendStatus(404)))
     .catch((err) => next(err));
@@ -44,53 +40,12 @@ function createProject(req, res) {
 }
 
 function deleteProject(req, res) {
-  projectService
-    .delete(req.body.project.id)
+  Projects.deleteOne({ _id: req.body.id })
     .then((dbModel) => res.json(dbModel))
     .catch((err) => res.status(422).json(err));
 }
 
-function changeCellStatus(req, res, next) {
-  const params = req.params;
-
-  let update;
-
-  if (params.status === "Complete") {
-    update = "Incomplete";
-  } else {
-    update = "Complete";
-  }
-  Projects.updateOne(
-    {
-      _id: params.project,
-    },
-    { $set: { "songs.$[s].song_status.$[i].status": update } },
-    {
-      arrayFilters: [
-        { "s._id": params.song },
-        { "i.instrument": params.instrument },
-      ],
-      multi: true,
-    }
-  )
-    .then((data) => {
-      console.log(data);
-      res.json(data);
-    })
-    .catch((err) => next(err));
-
-  let activity = {
-    action: update,
-    project: params.project,
-    song: params.song,
-    instrument: params.instrument,
-    misc: params.cellId,
-  };
-
-  // addActivity(params.project, req.body.user, activity, "update");
-}
-
-function pushSong(req, res) {
+function createSong(req, res) {
   let songStatus = [];
   let songArrangement = [];
   function Instrument(instrument) {
@@ -123,14 +78,71 @@ function pushSong(req, res) {
 }
 
 function deleteSong(req, res) {
+  const song = req.body.song;
+  const projectId = req.body.projectId;
+  console.log(song);
+
   Projects.findOneAndUpdate(
-    {
-      _id: req.body.id,
-    },
-    { $pull: { songs: { _id: req.body.songs } } }
+    { _id: projectId },
+    { $pull: { songs: { _id: song } } }
   )
     .then((dbModel) => res.json(dbModel))
     .catch((err) => res.status(422).json(err));
+
+  // Projects.findOneAndUpdate(
+  //   {
+  //     _id: userId,
+  //   },
+  //   { $pull: { songs: { _id: song } } }
+  // )
+  //   .then((dbModel) => res.json(dbModel))
+  //   .catch((err) => res.status(422).json(err));
+}
+
+function changeCellStatus(req, res, next) {
+  const options = {
+    project: req.body.project,
+    song: req.body.song,
+    instrument: req.body.instrument,
+    status: req.body.status,
+    id: req.body.id,
+  };
+
+  let update;
+
+  if (options.status === "Complete") {
+    update = "Incomplete";
+  } else {
+    update = "Complete";
+  }
+  Projects.updateOne(
+    {
+      _id: options.project,
+    },
+    { $set: { "songs.$[s].song_status.$[i].status": update } },
+    {
+      arrayFilters: [
+        { "s._id": options.song },
+        { "i.instrument": options.instrument },
+      ],
+      multi: true,
+    }
+  )
+    .then((data) => {
+      console.log(data);
+      res.json(data);
+    })
+    .catch((err) => next(err));
+
+  let activity = {
+    action: update,
+    project: options.project,
+    song: options.song,
+    instrument: options.instrument,
+    misc: options.cellId,
+  };
+
+  // addActivity(params.project, req.body.user, activity, "update");
 }
 
 // recent_activity: [
