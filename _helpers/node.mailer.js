@@ -36,8 +36,6 @@ function verifyEmail() {
 }
 
 function sendMail() {
-  console.log("Check");
-
   transport
     .sendMail({
       from: "no-reply@proprojectstudio.com",
