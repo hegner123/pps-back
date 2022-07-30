@@ -1,12 +1,11 @@
-const router = require("express").Router();
-const Spotify = require("node-spotify-api");
-const keys = require("../keys");
-console.log(keys);
-const spotify = new Spotify(keys.spotify);
+import express from "express";
+const router = express.Router();
+import Spotify from "node-spotify-api";
+import { spotifyKeys } from "../keys.js";
+
+const spotify = new Spotify(spotifyKeys);
 
 router.route("/song/:song").get(spotifySearch);
-
-module.exports = router;
 
 function spotifySearch(req, res) {
   let search = req.params.song.replace(/-/g, " ");
@@ -25,3 +24,5 @@ function spotifySearch(req, res) {
     res.json(previews);
   });
 }
+
+export { router as spotifyRouter };

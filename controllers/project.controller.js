@@ -1,74 +1,140 @@
-const express = require("express");
+import express from "express";
+import { Projects } from "../_helpers/db.js";
+
 const router = express.Router();
-const Project = require("../models/project.models");
-const db = require("_helpers/db");
-const Projects = db.Project;
 
-router.put(
-  "/project/:project/song/:song/instrument/:instrument/status/:status/id/:id",
-  changeCellStatus
-);
+router.put("/update", changeCellStatus);
+router.get("/:id", getProjects);
 router.post("/", createProject).delete("/", deleteProject);
-router.get("/:id", find);
-router.put("/songs", pushSong).delete("/songs", deleteSong);
+router.put("/songs", createSong).delete("/songs", deleteSong);
 
-module.exports = router;
+export { router as projectRouter };
 
-function find(req, res, next) {
+function getProjects(req, res, next) {
   Projects.find({ "members.id": req.params.id })
     .then((project) => (project ? res.json(project) : res.sendStatus(404)))
     .catch((err) => next(err));
 }
 
-function createProject(req, res, next) {
-  // let activity = {
-  //   action: "New Project",
-  //   project: req.body.newProject.projectTitle,
-  //   song: "",
-  //   instrument: "",
-  //   misc: "",
-  // };
+function getProject(projectId) {
+  Projects.findOne({
+    _id: projectId,
+  })
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => console.log(err));
+}
+
+function createProject(req, res) {
+  let activity = {
+    action: "New Project",
+    project: req.body.newProject.projectTitle,
+    song: "",
+    instrument: "",
+    misc: "",
+  };
 
   Projects.create(req.body.newProject)
     .then((dbModel) => {
-      console.log(dbModel);
-      // projectServiceaddActivity(
-      //   dbModel._id,
-      //   dbModel.members[0],
-      //   activity,
-      //   "New Project"
-      // );
+      projectService.addActivity(
+        dbModel._id,
+        dbModel.members[0],
+        activity,
+        "New Project"
+      );
       res.json(dbModel);
     })
     .catch((err) => res.status(422).json(err));
 }
 
-function deleteProject(req, res, next) {
-  projectService
-    .delete(req.body.project.id)
+function deleteProject(req, res) {
+  Projects.deleteOne({ _id: req.body.id })
     .then((dbModel) => res.json(dbModel))
     .catch((err) => res.status(422).json(err));
 }
 
+function createSong(req, res) {
+  let userId = req.body.newSong.id;
+  let song = req.body.newSong.song;
+  let songStatus = [];
+  let songArrangement = [];
+
+  function Instrument(instrument) {
+    this.instrument = instrument;
+    this.status = "Incomplete";
+  }
+
+  song.arrangement.forEach((inst) => {
+    let newInstrument = new Instrument(inst.instrument);
+    songStatus.push(newInstrument);
+    songArrangement.push(inst.instrument);
+  });
+
+  const newSong = {
+    song_title: song.songTitle,
+    song_references: song.references,
+    song_arrangements: songArrangement,
+    song_status: songStatus,
+  };
+
+  Projects.findOneAndUpdate(
+    {
+      _id: song.id,
+    },
+    {
+      $push: {
+        songs: newSong,
+      },
+    }
+  )
+    .then((dbModel) => {
+      console.log(dbModel);
+      res.send(dbModel);
+    })
+    .catch((err) => res.status(422).json(err));
+}
+
+function deleteSong(req, res) {
+  const song = req.body.song;
+  const projectId = req.body.projectId;
+
+  Projects.updateOne({ _id: projectId }, { $pull: { songs: { _id: song } } })
+    .then((dbModel) => {
+      Projects.findOne({
+        _id: projectId,
+      }).then((data) => {
+        res.json(data);
+      });
+    })
+    .catch((err) => res.status(422).json(err));
+}
+
 function changeCellStatus(req, res, next) {
-  const params = req.params;
+  const options = {
+    project: req.body.project,
+    song: req.body.song,
+    instrument: req.body.instrument,
+    status: req.body.status,
+    id: req.body.id,
+  };
 
   let update;
 
-  if (params.status === "Complete") {
+  if (options.status === "Complete") {
     update = "Incomplete";
   } else {
     update = "Complete";
   }
   Projects.updateOne(
     {
-      _id: params.project,
+      _id: options.project,
     },
     { $set: { "songs.$[s].song_status.$[i].status": update } },
     {
       arrayFilters: [
-        { "s._id": params.song },
-        { "i.instrument": params.instrument },
+        { "s._id": options.song },
+        { "i.instrument": options.instrument },
       ],
       multi: true,
     }
@@ -81,14 +147,15 @@ function changeCellStatus(req, res, next) {
 
   let activity = {
     action: update,
-    project: params.project,
-    song: params.song,
-    instrument: params.instrument,
-    misc: params.cellId,
+    project: options.project,
+    song: options.song,
+    instrument: options.instrument,
+    misc: options.cellId,
   };
 
   // addActivity(params.project, req.body.user, activity, "update");
 }
+<<<<<<< HEAD
 
 function pushSong(req, res, next) {
   let songStatus = [];
@@ -171,3 +238,5 @@ function addActivity(project, userId, activity, type) {
     )
   );
 }
+=======
+>>>>>>> c475af48eaeaadf1cf7e0b52beb2a2a7436db37f

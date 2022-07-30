@@ -1,7 +1,6 @@
-﻿const express = require("express");
+﻿import express from "express";
 const router = express.Router();
-const userService = require("../_helpers/user.service");
-
+import { userService } from "../_helpers/user.service.js";
 
 // routes
 router.post("/authenticate", authenticate);
@@ -11,8 +10,6 @@ router.put("/:id", update);
 router.put("/addtorecent/:id", add);
 router.delete("/:id", _delete);
 router.get("/confirm/:confirmationCode", confirm);
-
-module.exports = router;
 
 function authenticate(req, res, next) {
   userService
@@ -68,3 +65,4 @@ function _delete(req, res, next) {
     .then(() => res.json({}))
     .catch((err) => next(err));
 }
+export { router as userRouter };

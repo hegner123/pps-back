@@ -1,10 +1,8 @@
-const expressJwt = require("express-jwt");
-const config = require("config.json");
-const userService = require("./user.service");
+import expressJwt from "express-jwt";
+import { config } from "../config.js";
+import { userService } from "./user.service.js";
 
-module.exports = jwt;
-
-function jwt() {
+export function jwt() {
   const secret = config.secret;
   return expressJwt({ secret, algorithms: ["HS256"], isRevoked }).unless({
     path: [
@@ -13,6 +11,7 @@ function jwt() {
       "/users/register",
       "/song-preview/",
       "/users/add",
+      "/projects",
     ],
   });
 }
@@ -22,8 +21,9 @@ async function isRevoked(req, payload, done) {
 
   // revoke token if user no longer exists
   if (!user) {
+    console.log(`User doesn't exist`);
     return done(null, true);
   }
-
+  console.log(`auth error`.red);
   done();
 }

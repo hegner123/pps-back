@@ -1,9 +1,15 @@
-const nodeMailer = require("../_helpers/node.mailer");
+import { sendMail } from "../_helpers/node.mailer.js";
 
-module.exports = {
-  controllerSendMail,
+const message = {
+  from: "admin@proprojectstudio.com",
+  to: "hegner123@gmail.com",
+  subject: "Test Message from ProProjectStudio",
+  text: "Test Message from ProProjectStudio",
+  html: "<h1>Test Message from ProProjectStudio</h1>",
 };
 
-function controllerSendMail(name, email, confirmationcode) {
-  nodeMailer.sendMail(name, email, confirmationcode);
+function controllerSendMail() {
+  sendMail(message);
 }
+
+export { controllerSendMail };

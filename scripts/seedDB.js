@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Project = require("../models/project.models");
+const mongoose from "mongoose");
+const Project from "../models/project.models");
 
 const connectionOptions = {
   useCreateIndex: true,

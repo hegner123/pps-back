@@ -1,5 +1,5 @@
-require("dotenv").config();
-const spotify = {
+import "dotenv/config";
+const spotifyKeys = {
   id: process.env.SPOTIFY_ID,
   secret: process.env.SPOTIFY_SECRET,
 };
@@ -9,7 +9,4 @@ const email = {
   pass: process.env.EMAIL_PASSWORD,
 };
 
-module.exports = {
-  spotify,
-  email,
-};
+export { spotifyKeys, email };
