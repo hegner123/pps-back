@@ -1,13 +1,8 @@
-const nodemailer = require("nodemailer");
-const smtpTransport = require("nodemailer-smtp-transport");
-const keys = require("../keys");
-const emailUser = keys.email.user;
-const emailPass = keys.email.pass;
-
-module.exports = {
-  verifyEmail,
-  sendMail,
-};
+import nodemailer from "nodemailer";
+import smtpTransport from "nodemailer-smtp-transport";
+import { email } from "../keys.js";
+const emailUser = email.user;
+const emailPass = email.pass;
 
 const transport = nodemailer.createTransport(
   smtpTransport({
@@ -50,3 +45,4 @@ function sendMail() {
     .then((success) => console.log(success))
     .catch((err) => console.log(err));
 }
+export { verifyEmail, sendMail };

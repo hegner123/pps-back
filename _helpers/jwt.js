@@ -1,11 +1,8 @@
-const expressJwt = require("express-jwt");
-const config = require("config.json");
-const userService = require("./user.service");
-const colors = require("colors");
+import expressJwt from "express-jwt";
+import { config } from "../config.js";
+import { userService } from "./user.service.js";
 
-module.exports = jwt;
-
-function jwt() {
+export function jwt() {
   const secret = config.secret;
   return expressJwt({ secret, algorithms: ["HS256"], isRevoked }).unless({
     path: [

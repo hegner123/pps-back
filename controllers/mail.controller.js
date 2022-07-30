@@ -1,8 +1,4 @@
-const nodeMailer = require("../_helpers/node.mailer");
-
-module.exports = {
-  controllerSendMail,
-};
+import { sendMail } from "../_helpers/node.mailer.js";
 
 const message = {
   from: "admin@proprojectstudio.com",
@@ -13,5 +9,7 @@ const message = {
 };
 
 function controllerSendMail() {
-  nodeMailer.sendMail(message);
+  sendMail(message);
 }
+
+export { controllerSendMail };
