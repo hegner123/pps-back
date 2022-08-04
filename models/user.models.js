@@ -24,6 +24,11 @@ const schema = new Schema({
       recentID: String,
     }),
   ],
+  userSettings: {
+    completeColor: String,
+    incompleteColor: String,
+    themeName: String,
+  },
 });
 
 schema.set("toJSON", {

@@ -1,49 +1,42 @@
 import express from "express";
+import { NewSong } from "../_constructors/newSong.js";
 import { Projects } from "../_helpers/db.js";
 
 const router = express.Router();
 
 router.put("/update", changeCellStatus);
-router.get("/:id", getProjects);
+router.get("/:id", getProjects).put("/:id/member", addUser);
 router.post("/", createProject).delete("/", deleteProject);
 router.put("/songs", createSong).delete("/songs", deleteSong);
 
 export { router as projectRouter };
 
 function getProjects(req, res, next) {
+  console.log(req.params.id);
   Projects.find({ "members.id": req.params.id })
     .then((project) => (project ? res.json(project) : res.sendStatus(404)))
     .catch((err) => next(err));
 }
 
-function getProject(projectId) {
-  Projects.findOne({
-    _id: projectId,
-  })
-    .then((data) => {
-      return data;
-    })
-    .catch((err) => console.log(err));
-}
-
 function createProject(req, res) {
-  let activity = {
-    action: "New Project",
-    project: req.body.newProject.projectTitle,
-    song: "",
-    instrument: "",
-    misc: "",
-  };
-
   Projects.create(req.body.newProject)
     .then((dbModel) => {
-      projectService.addActivity(
-        dbModel._id,
-        dbModel.members[0],
-        activity,
-        "New Project"
-      );
       res.json(dbModel);
+    })
+    .catch((err) => res.status(422).json(err));
+}
+
+function addUser(req, res) {
+  const newUser = {
+    id: req.body.id,
+    userName: req.body.userName,
+  };
+  Projects.findOneAndUpdate(
+    { _id: req.params.id },
+    { $push: { members: { id: newUser.id, userName: newUser.userName } } }
+  )
+    .then((dbModel) => {
+      res.send(dbModel);
     })
     .catch((err) => res.status(422).json(err));
 }
@@ -55,41 +48,12 @@ function deleteProject(req, res) {
 }
 
 function createSong(req, res) {
-  let userId = req.body.newSong.id;
   let song = req.body.newSong.song;
-  let songStatus = [];
-  let songArrangement = [];
+  let newSong = new NewSong(song);
+  console.log(newSong);
 
-  function Instrument(instrument) {
-    this.instrument = instrument;
-    this.status = "Incomplete";
-  }
-
-  song.arrangement.forEach((inst) => {
-    let newInstrument = new Instrument(inst.instrument);
-    songStatus.push(newInstrument);
-    songArrangement.push(inst.instrument);
-  });
-
-  const newSong = {
-    song_title: song.songTitle,
-    song_references: song.references,
-    song_arrangements: songArrangement,
-    song_status: songStatus,
-  };
-
-  Projects.findOneAndUpdate(
-    {
-      _id: song.id,
-    },
-    {
-      $push: {
-        songs: newSong,
-      },
-    }
-  )
+  Projects.findOneAndUpdate({ _id: song.id }, { $push: { songs: newSong } })
     .then((dbModel) => {
-      console.log(dbModel);
       res.send(dbModel);
     })
     .catch((err) => res.status(422).json(err));
@@ -111,7 +75,7 @@ function deleteSong(req, res) {
 }
 
 function changeCellStatus(req, res, next) {
-  const options = {
+  const cellOptions = {
     project: req.body.project,
     song: req.body.song,
     instrument: req.body.instrument,
@@ -121,20 +85,20 @@ function changeCellStatus(req, res, next) {
 
   let update;
 
-  if (options.status === "Complete") {
+  if (cellOptions.status === "Complete") {
     update = "Incomplete";
   } else {
     update = "Complete";
   }
   Projects.updateOne(
     {
-      _id: options.project,
+      _id: cellOptions.project,
     },
-    { $set: { "songs.$[s].song_status.$[i].status": update } },
+    { $set: { "songs.$[s].songStatus.$[i].status": update } },
     {
       arrayFilters: [
-        { "s._id": options.song },
-        { "i.instrument": options.instrument },
+        { "s._id": cellOptions.song },
+        { "i.instrument": cellOptions.instrument },
       ],
       multi: true,
     }
@@ -144,14 +108,4 @@ function changeCellStatus(req, res, next) {
       res.json(data);
     })
     .catch((err) => next(err));
-
-  let activity = {
-    action: update,
-    project: options.project,
-    song: options.song,
-    instrument: options.instrument,
-    misc: options.cellId,
-  };
-
-  // addActivity(params.project, req.body.user, activity, "update");
 }

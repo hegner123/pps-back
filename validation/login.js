@@ -1,7 +1,7 @@
-const Validator from "validator");
-const isEmpty from "is-empty");
+import Validator from "validator";
+import isEmpty from "is-empty";
 
-module.exports = function validateLoginInput(data) {
+export function validateLoginInput(data) {
   let errors = {};
 
   // Convert empty fields to an empty string so we can use validator functions
@@ -21,4 +21,4 @@ module.exports = function validateLoginInput(data) {
     errors,
     isValid: isEmpty(errors),
   };
-};
+}

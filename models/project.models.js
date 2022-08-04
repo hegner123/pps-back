@@ -6,36 +6,37 @@ const ProjectSchema = new Schema({
   members: [
     {
       id: { type: String, required: true },
-      username: { type: String, required: true },
+      userName: { type: String, required: true },
     },
   ],
   projectTitle: { type: String, required: true },
   projectSlug: { type: String, required: true },
   songs: [
     {
-      song_title: String,
-      song_arrangements: { type: Array, default: [] },
-      song_status: [
+      songTitle: String,
+      songArrangements: { type: Array, default: [] },
+      songStatus: [
         {
           instrument: { type: String, required: true },
           status: { type: String, required: true },
         },
       ],
-      song_lyrics: String,
-      song_key: String,
-      song_bpm: Number,
-      song_references: { type: Array, default: [] },
+      songLyrics: String,
+      songKey: String,
+      songBpm: Number,
+      songReferences: { type: Array, default: [] },
     },
   ],
-  project_arrangement: [
+  projectArrangement: [
     {
       instruments: { type: Array, default: [] },
     },
   ],
 
-  recent_activity: [
+  recentActivity: [
     {
       user: { type: String, required: true },
+
       type: { type: String, required: true },
       read: Boolean,
       activity: {

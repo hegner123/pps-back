@@ -9,6 +9,8 @@ export const userService = {
   create,
   update,
   addToRecent,
+  matchUsers,
+  saveSettings,
   delete: _delete,
 };
 
@@ -34,6 +36,17 @@ async function getById(id) {
   }
 }
 
+async function matchUsers(email) {
+  // const searchExpression = new RegExp(`^.*(${email}).*`);
+  // const emailRegEx =/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+  const searchResult = await User.findOne({ email: email });
+  if (searchResult) {
+    return { ...searchResult.toJSON() };
+  } else {
+    return "No users were found with that email address";
+  }
+}
+
 async function create(userParam) {
   // validate
   if (await User.findOne({ userName: userParam.userName })) {
@@ -46,7 +59,7 @@ async function create(userParam) {
   const token = jwt.sign({ email: userParam.email });
 
   const user = new User({
-    username: userParam.username,
+    userName: userParam.userName,
     email: userParam.email,
     firstName: userParam.firstName,
     lastName: userParam.lastName,
@@ -107,4 +120,36 @@ async function addToRecent(userId, projectId) {
 
 async function _delete(id) {
   await User.findByIdAndRemove(id);
+}
+
+async function saveSettings(id, userParam) {
+  const user = await User.findById(id);
+
+  console.log("id", id);
+  console.log("userParam", userParam);
+
+  // validate
+  if (!user) throw "User not found";
+  if (
+    user.userName !== userParam.userName &&
+    (await User.findOne({ userName: userParam.userName }))
+  ) {
+    throw 'UserName "' + userParam.userName + '" is already taken';
+  }
+
+  // hash hash if it was entered
+  if (userParam.hash) {
+    userParam.hash = bcrypt.hashSync(userParam.hash, 10);
+  }
+
+  const updated = {
+    ...user,
+    userSettings: userParam,
+  };
+  console.log("updated", updated);
+  // copy userParam properties to user
+  Object.assign(user, updated);
+
+  await user.save();
+  return { ...user.toJSON() };
 }

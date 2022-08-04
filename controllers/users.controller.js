@@ -7,9 +7,11 @@ router.post("/authenticate", authenticate);
 router.get("/:id", getUser);
 router.post("/register", register);
 router.put("/:id", update);
+router.put("/:id/settings", saveSettings);
 router.put("/addtorecent/:id", add);
 router.delete("/:id", _delete);
 router.get("/confirm/:confirmationCode", confirm);
+router.get("/search/:email", getUsers);
 
 function authenticate(req, res, next) {
   userService
@@ -26,6 +28,16 @@ function getUser(req, res, next) {
   console.log(req.params.id);
   userService
     .getById({ _id: req.params.id })
+    .then((data) => {
+      console.log(data);
+      res.json(data);
+    })
+    .catch((err) => next(err));
+}
+
+function getUsers(req, res, next) {
+  userService
+    .matchUsers(req.params.email)
     .then((data) => res.json(data))
     .catch((err) => next(err));
 }
@@ -63,6 +75,13 @@ function _delete(req, res, next) {
   userService
     .delete(req.params.id)
     .then(() => res.json({}))
+    .catch((err) => next(err));
+}
+
+function saveSettings(req, res, next) {
+  userService
+    .saveSettings(req.params.id, req.body)
+    .then((result) => res.json(result))
     .catch((err) => next(err));
 }
 export { router as userRouter };
