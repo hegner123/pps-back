@@ -8,10 +8,12 @@ router.get("/:id", getUser);
 router.post("/register", register);
 router.put("/:id", update);
 router.put("/:id/settings", saveSettings);
-router.put("/addtorecent/:id", add);
+router.put("/recent/:id", add);
 router.delete("/:id", _delete);
 router.get("/confirm/:confirmationCode", confirm);
 router.get("/search/:email", getUsers);
+router.post("/invitation.send/:id", sendInvitation);
+router.post("/invitation.handle/:id", handleInvitation);
 
 function authenticate(req, res, next) {
   userService
@@ -81,6 +83,19 @@ function _delete(req, res, next) {
 function saveSettings(req, res, next) {
   userService
     .saveSettings(req.params.id, req.body)
+    .then((result) => res.json(result))
+    .catch((err) => next(err));
+}
+function sendInvitation(req, res, next) {
+  console.log("sendInvitation Route", req.body);
+  userService
+    .sendInvitation(req.params.id, req.body)
+    .then((result) => res.json(result))
+    .catch((err) => next(err));
+}
+function handleInvitation(req, res, next) {
+  userService
+    .handleInvitation(req.params.id, req.body)
     .then((result) => res.json(result))
     .catch((err) => next(err));
 }

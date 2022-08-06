@@ -29,6 +29,17 @@ const schema = new Schema({
     incompleteColor: String,
     themeName: String,
   },
+  invitations: [
+    {
+      projectSlug: String,
+      projectId: String,
+      invitationStatus: String,
+      hostUser: {
+        userName: String,
+        id: String,
+      },
+    },
+  ],
 });
 
 schema.set("toJSON", {

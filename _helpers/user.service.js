@@ -2,6 +2,8 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { User } from "./db.js";
+import { statusConstants as status } from "./status.constants.js";
+import { projectService } from "./project.service.js";
 
 export const userService = {
   authenticate,
@@ -11,6 +13,8 @@ export const userService = {
   addToRecent,
   matchUsers,
   saveSettings,
+  sendInvitation,
+  handleInvitation,
   delete: _delete,
 };
 
@@ -100,8 +104,6 @@ async function update(id, userParam) {
 }
 
 async function addToRecent(userId, projectId) {
-  console.log("projectId", projectId);
-  console.log("userId", userId);
   const user = await User.updateOne(
     { _id: userId },
     {
@@ -125,31 +127,100 @@ async function _delete(id) {
 async function saveSettings(id, userParam) {
   const user = await User.findById(id);
 
-  console.log("id", id);
-  console.log("userParam", userParam);
-
-  // validate
   if (!user) throw "User not found";
-  if (
-    user.userName !== userParam.userName &&
-    (await User.findOne({ userName: userParam.userName }))
-  ) {
-    throw 'UserName "' + userParam.userName + '" is already taken';
-  }
-
-  // hash hash if it was entered
-  if (userParam.hash) {
-    userParam.hash = bcrypt.hashSync(userParam.hash, 10);
-  }
 
   const updated = {
     ...user,
     userSettings: userParam,
   };
-  console.log("updated", updated);
+
   // copy userParam properties to user
   Object.assign(user, updated);
 
   await user.save();
   return { ...user.toJSON() };
+}
+async function sendInvitation(recipientId, userParam) {
+  const user = await User.findOneAndUpdate(
+    { _id: recipientId },
+    {
+      $push: {
+        invitations: {
+          projectSlug: userParam.projectSlug,
+          projectId: userParam.projectId,
+          invitationStatus: status.PENDING,
+          hostUser: {
+            userName: userParam.hostUser.userName,
+            id: userParam.hostUser.userId,
+          },
+        },
+      },
+    }
+  ).then((dbModel) => {
+    return dbModel;
+  });
+
+  if (!user) throw "User not found";
+}
+
+async function handleInvitation(userId, userParam) {
+  const user = await User.findById(userId);
+
+  if (!user) throw "User not found";
+
+  const theInvite = user.invitations.filter((invitation) => {
+    return invitation._id == userParam.invitationId;
+  });
+
+  const otherInvites = user.invitations.filter((invitation) => {
+    return invitation._id != userParam.invitationId;
+  });
+
+  function updateInvite(invitation) {
+    invitation.invitationStatus = userParam.status;
+    return invitation;
+  }
+
+  async function sideEffects(action, userId, userName, projectId) {
+    switch (action) {
+      case status.ACCEPTED:
+        const args = {
+          body: {
+            id: userId,
+            userName: userName,
+          },
+          params: { id: projectId },
+        };
+
+        return projectService.addUser(args);
+
+      case status.DECLINED:
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  // copy userParam properties to user
+  const updated = {
+    ...user,
+    user: { invitations: [updateInvite(theInvite[0]), ...otherInvites] },
+  };
+
+  Object.assign(user, updated);
+
+  const effects = await sideEffects(
+    userParam.status,
+    userId,
+    user.userName,
+    theInvite[0].projectId
+  );
+
+  await user.save();
+  return {
+    ...user.toJSON(),
+    sideEffects: effects,
+  };
+  // return { updated };
 }

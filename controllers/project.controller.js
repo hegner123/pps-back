@@ -1,6 +1,7 @@
 import express from "express";
 import { NewSong } from "../_constructors/newSong.js";
 import { Projects } from "../_helpers/db.js";
+import { projectService } from "../_helpers/project.service.js";
 
 const router = express.Router();
 
@@ -27,14 +28,8 @@ function createProject(req, res) {
 }
 
 function addUser(req, res) {
-  const newUser = {
-    id: req.body.id,
-    userName: req.body.userName,
-  };
-  Projects.findOneAndUpdate(
-    { _id: req.params.id },
-    { $push: { members: { id: newUser.id, userName: newUser.userName } } }
-  )
+  projectService
+    .addUser(req)
     .then((dbModel) => {
       res.send(dbModel);
     })
