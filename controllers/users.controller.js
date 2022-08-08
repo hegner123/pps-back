@@ -14,6 +14,7 @@ router.get("/confirm/:confirmationCode", confirm);
 router.get("/search/:email", getUsers);
 router.post("/invitation.send/:id", sendInvitation);
 router.post("/invitation.handle/:id", handleInvitation);
+router.post("/invitation.check/:id", checkInvites);
 
 function authenticate(req, res, next) {
   userService
@@ -87,7 +88,6 @@ function saveSettings(req, res, next) {
     .catch((err) => next(err));
 }
 function sendInvitation(req, res, next) {
-  console.log("sendInvitation Route", req.body);
   userService
     .sendInvitation(req.params.id, req.body)
     .then((result) => res.json(result))
@@ -96,6 +96,12 @@ function sendInvitation(req, res, next) {
 function handleInvitation(req, res, next) {
   userService
     .handleInvitation(req.params.id, req.body)
+    .then((result) => res.json(result))
+    .catch((err) => next(err));
+}
+function checkInvites(req, res, next) {
+  userService
+    .checkInvites(req.params.id, req.body.projectId)
     .then((result) => res.json(result))
     .catch((err) => next(err));
 }

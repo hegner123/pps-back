@@ -60,9 +60,11 @@ function deleteSong(req, res) {
 
   Projects.updateOne({ _id: projectId }, { $pull: { songs: { _id: song } } })
     .then((dbModel) => {
+      console.log(dbModel);
       Projects.findOne({
         _id: projectId,
       }).then((data) => {
+        console.log(data)
         res.json(data);
       });
     })

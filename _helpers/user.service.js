@@ -15,6 +15,7 @@ export const userService = {
   saveSettings,
   sendInvitation,
   handleInvitation,
+  checkInvites,
   delete: _delete,
 };
 
@@ -140,9 +141,10 @@ async function saveSettings(id, userParam) {
   await user.save();
   return { ...user.toJSON() };
 }
-async function sendInvitation(recipientId, userParam) {
+
+async function sendInvitation(sendToId, userParam) {
   const user = await User.findOneAndUpdate(
-    { _id: recipientId },
+    { _id: sendToId },
     {
       $push: {
         invitations: {
@@ -223,4 +225,16 @@ async function handleInvitation(userId, userParam) {
     sideEffects: effects,
   };
   // return { updated };
+}
+
+async function checkInvites(sendToId, projectId) {
+  const user = await User.findById(sendToId);
+  const hasMatch = user.invitations.filter((invite) => {
+    return invite.projectId == projectId;
+  });
+  if (hasMatch.length > 0) {
+    return true;
+  } else {
+    return false;
+  }
 }
