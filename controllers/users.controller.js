@@ -4,14 +4,16 @@ import { userService } from "../_helpers/user.service.js";
 
 // routes
 router.post("/authenticate", authenticate);
+router.post("/resetPassword", resetPassword);
 router.get("/:id", getUser);
+router.get("/search/:email", getUsers);
 router.post("/register", register);
 router.put("/:id", update);
 router.put("/:id/settings", saveSettings);
 router.put("/recent/:id", add);
 router.delete("/:id", _delete);
 router.get("/confirm/:confirmationCode", confirm);
-router.get("/search/:email", getUsers);
+
 router.post("/invitation.send/:id", sendInvitation);
 router.post("/invitation.handle/:id", handleInvitation);
 router.post("/invitation.check/:id", checkInvites);
@@ -41,6 +43,13 @@ function getUser(req, res, next) {
 function getUsers(req, res, next) {
   userService
     .matchUsers(req.params.email)
+    .then((data) => res.json(data))
+    .catch((err) => next(err));
+}
+
+function resetPassword(req, res, next) {
+  userService
+    .resetPassword(req.body)
     .then((data) => res.json(data))
     .catch((err) => next(err));
 }

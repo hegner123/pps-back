@@ -9,6 +9,7 @@ export const userService = {
   authenticate,
   getById,
   create,
+  resetPassword,
   update,
   addToRecent,
   matchUsers,
@@ -48,7 +49,7 @@ async function matchUsers(email) {
   if (searchResult) {
     return { ...searchResult.toJSON() };
   } else {
-    return "No users were found with that email address";
+    return `Invite ${email} to Proproject Studio?`;
   }
 }
 
@@ -75,6 +76,30 @@ async function create(userParam) {
   // save user
   await user.save();
   mail.sendMail(userParam.firstName, userParam.email, token);
+}
+
+async function resetPassword(userParam) {
+  const user = await User.findById(userParam.id);
+
+  // validate
+  if (!user) throw "User not found";
+  if (
+    user.userName !== userParam.userName &&
+    (await User.findOne({ userName: userParam.userName }))
+  ) {
+    throw 'UserName "' + userParam.userName + '" is already taken';
+  }
+
+  // hash hash if it was entered
+  if (userParam.hash) {
+    userParam.hash = bcrypt.hashSync(userParam.hash, 10);
+  }
+
+  // copy userParam properties to user
+  Object.assign(user, userParam);
+  // console.log(user);
+  await user.save();
+  return { ...user.toJSON() };
 }
 
 async function confirmAccount() {
