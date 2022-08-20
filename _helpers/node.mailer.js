@@ -1,6 +1,9 @@
 import nodemailer from "nodemailer";
 import smtpTransport from "nodemailer-smtp-transport";
 import { email } from "../keys.js";
+import colors from "colors";
+
+import { projectInvite } from "../_templates/projectInvite.js";
 const emailUser = email.user;
 const emailPass = email.pass;
 
@@ -20,17 +23,29 @@ const transport = nodemailer.createTransport(
 );
 
 // verify connection configuration
-function verifyEmail() {
+async function verifyEmail() {
   transport.verify(function (error, success) {
     if (error) {
       console.log(error);
     } else {
-      console.log("Server is ready to take our messages");
+      console.log(colors.brightGreen(`Mail server connected! 📧`));
     }
   });
 }
 
-function sendMail() {
+function sendInviteEmail(options) {
+  transport
+    .sendMail({
+      from: "no-reply@proprojectstudio.com",
+      to: options.email,
+      subject: `${options.hostUser} has invited you to join ${options.projectName}`,
+      html: projectInvite(options),
+    })
+    .then((success) => success)
+    .catch((err) => console.log(err));
+}
+
+function sendConfirmationEmail() {
   transport
     .sendMail({
       from: "admin@proprojectstudio.com",
@@ -98,4 +113,4 @@ function sendMail() {
     .then((success) => console.log(success))
     .catch((err) => console.log(err));
 }
-export { verifyEmail, sendMail };
+export { verifyEmail, sendConfirmationEmail, sendInviteEmail };

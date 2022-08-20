@@ -7,16 +7,16 @@ router.post("/authenticate", authenticate);
 router.post("/resetPassword", resetPassword);
 router.get("/:id", getUser);
 router.get("/search/:email", getUsers);
+router.get("/confirm/:confirmationCode", confirm);
 router.post("/register", register);
+router.post("/invitation.send/:id", sendInvitation);
+router.post("/invitation.sendExternal/:id", sendExternalInvitation);
+router.post("/invitation.handle/:id", handleInvitation);
+router.post("/invitation.check/:id", checkInvites);
 router.put("/:id", update);
 router.put("/:id/settings", saveSettings);
 router.put("/recent/:id", add);
 router.delete("/:id", _delete);
-router.get("/confirm/:confirmationCode", confirm);
-
-router.post("/invitation.send/:id", sendInvitation);
-router.post("/invitation.handle/:id", handleInvitation);
-router.post("/invitation.check/:id", checkInvites);
 
 function authenticate(req, res, next) {
   userService
@@ -99,6 +99,12 @@ function saveSettings(req, res, next) {
 function sendInvitation(req, res, next) {
   userService
     .sendInvitation(req.params.id, req.body)
+    .then((result) => res.json(result))
+    .catch((err) => next(err));
+}
+function sendExternalInvitation(req, res, next) {
+  userService
+    .sendExternalInvitation(req.params.id, req.body)
     .then((result) => res.json(result))
     .catch((err) => next(err));
 }

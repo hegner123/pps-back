@@ -1,4 +1,4 @@
-import { sendMail } from "../_helpers/node.mailer.js";
+import { sendConfirmationEmail } from "../_helpers/node.mailer.js";
 
 const message = {
   from: "admin@proprojectstudio.com",
@@ -9,7 +9,7 @@ const message = {
 };
 
 function controllerSendMail() {
-  sendMail(message);
+  sendConfirmationEmail(message);
 }
 
 export { controllerSendMail };

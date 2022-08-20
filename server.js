@@ -10,6 +10,7 @@ import { controllerSendMail } from "./controllers/mail.controller.js";
 import { userRouter } from "./controllers/users.controller.js";
 import { projectRouter } from "./controllers/project.controller.js";
 import { spotifyRouter } from "./controllers/spotify.controller.js";
+import { verifyEmail } from "./_helpers/node.mailer.js";
 const app = express();
 
 app.use(express.json());

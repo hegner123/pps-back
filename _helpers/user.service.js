@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { User } from "./db.js";
 import { statusConstants as status } from "./status.constants.js";
 import { projectService } from "./project.service.js";
+import { sendInviteEmail } from "./node.mailer.js";
 
 export const userService = {
   authenticate,
@@ -15,6 +16,7 @@ export const userService = {
   matchUsers,
   saveSettings,
   sendInvitation,
+  sendExternalInvite,
   handleInvitation,
   checkInvites,
   delete: _delete,
@@ -188,6 +190,20 @@ async function sendInvitation(sendToId, userParam) {
   });
 
   if (!user) throw "User not found";
+}
+
+async function sendExternalInvite(sendToId, userParam) {
+  const options = {
+    email: userParam.email,
+    hostUser,
+    projectName,
+    inviteMessage,
+    link: { url, text },
+  };
+
+  const sendEmail = await sendInviteEmail(options);
+
+  return sendEmail;
 }
 
 async function handleInvitation(userId, userParam) {
